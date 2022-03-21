@@ -1,0 +1,16 @@
+{
+  "name": "tmsys",
+  "version": "1.0.0",
+  "description": "Task Management System - Kanban",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Wong Wei Jia Jethro (70005835)",
+  "license": "ISC",
+  "dependencies": {
+    "argon2": "^0.28.5",
+    "express": "^4.17.3",
+    "express-session": "^1.17.2",
+    "mysql": "^2.18.1",
+    "pug": "^3.0.2"
+  }
+}
