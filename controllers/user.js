@@ -96,4 +96,28 @@ router.post('/passwordchange', async (req,res)=>{
     }
 });
 
+router.get('/emailchange', (req, res)=>{
+    res.render('emailchange',{isLoggedIn: req.session.isLoggedIn, error: false});
+});
+
+router.get('/emailchange', async (req,res)=>{
+    const { emailNew } = req.body;
+    let myQuery = `UPDATE ${dbModel.getDbLoginSchema()} SET ${dbModel.getDbLoginSchemaColEmail()}='${emailNew}' WHERE ${dbModel.getDbLoginSchemaColId()}='${req.session.userid}'`;
+    let retQ = await dbModel.performQuery(myQuery);
+    let result = retQ.result;
+    let error = retQ.error;
+    if(error){
+        res.render('emailchange', {isLoggedIn: req.session.isLoggedIn, error:'An Internal Error occurred. (Database)'});
+        return;
+    }
+    if (result.changedRows){
+        var successString = 'Password successfully changed.';
+        res.render('emailchange', {isLoggedIn: req.session.isLoggedIn, success:successString});
+    } else {
+        var errorString = 'An Internal Error occurred. (Website)'
+        res.render('emailchange', {isLoggedIn: req.session.isLoggedIn, error:errorString});
+    }
+});
+
+
 module.exports = router;
