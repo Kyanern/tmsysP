@@ -111,7 +111,7 @@ router.post('/emailchange', async (req,res)=>{
         return;
     }
     if (result.changedRows){
-        var successString = 'Password successfully changed.';
+        var successString = 'Email successfully changed.';
         res.render('emailchange', {isLoggedIn: req.session.isLoggedIn, success:successString});
     } else {
         var errorString = 'An Internal Error occurred. (Website)'
