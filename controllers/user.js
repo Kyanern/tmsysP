@@ -100,7 +100,7 @@ router.get('/emailchange', (req, res)=>{
     res.render('emailchange',{isLoggedIn: req.session.isLoggedIn, error: false});
 });
 
-router.get('/emailchange', async (req,res)=>{
+router.post('/emailchange', async (req,res)=>{
     const { emailNew } = req.body;
     let myQuery = `UPDATE ${dbModel.getDbLoginSchema()} SET ${dbModel.getDbLoginSchemaColEmail()}='${emailNew}' WHERE ${dbModel.getDbLoginSchemaColId()}='${req.session.userid}'`;
     let retQ = await dbModel.performQuery(myQuery);
