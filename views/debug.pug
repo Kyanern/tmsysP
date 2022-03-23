@@ -24,15 +24,6 @@ html
           input( type="password" class="form-control" name="password" placeholder="Password")
         div(class="col-auto")
           button(type="submit" class="btn btn-primary mb-3" id="btn_argon2" name="btn_argon2" value=true)="test argon2 encryption"
-      //-
-        form(class="row g-3" method="get" action="" id="form_methodGet_test")
-          div(class="col-auto")
-            input(type="text" class="form-control" name="username" placeholder="Search usernames...")
-          div(class="col-auto")
-            button(type="submit" class="btn btn-primary mb-3" id="btn_searchUsers")="Search"
-
-        if username_term
-          p #{username_term}
     
       div(class="row")
         div(class="col")
