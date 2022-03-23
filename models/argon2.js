@@ -17,7 +17,7 @@ module.exports = {
             return ({hash: result});
         } catch(err) {
             console.log("argon2Hash - error caught:\n" + err);
-            throw ({error: err});
+            return ({error: err});
         }
     }
 }

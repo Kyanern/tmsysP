@@ -10,7 +10,7 @@ router.use(async (req, res, next) => {
         res.redirect('login');
         return;
     }
-    req.body.isAdmin = await checksModel.checkGroup(req.session.userid, 'admin');
+    req.body.isAdmin = await checksModel.checkGroup(req.session.username, 'admin');
 
     next();
 });

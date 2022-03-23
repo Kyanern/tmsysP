@@ -11,6 +11,5 @@
     "dbLoginSchemaColIsActive": "`isactive`",
     "dbUsergroupsSchema": "nodelogin.usergroups",
     "dbUsergroupsSchemaColUsername": "`username`",
-    "dbUsergroupsSchemaColId": "`id`",
     "dbUsergroupsSchemaColUsergroup": "`usergroup`"
 }

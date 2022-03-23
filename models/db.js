@@ -26,9 +26,10 @@ module.exports = {
     getDbLoginSchemaColEmail: () => {
         return `${dbConfigs.dbLoginSchemaColEmail}`;
     },
-    getDbLoginSchemaColId: () => {
-        return `${dbConfigs.dbLoginSchemaColId}`;
-    },
+    // I don't want to expose what people might not need.
+    // getDbLoginSchemaColId: () => {
+    //     return `${dbConfigs.dbLoginSchemaColId}`;
+    // },
     getDbLoginSchemaColIsActive: () => {
         return `${dbConfigs.dbLoginSchemaColIsActive}`;
     },
@@ -38,9 +39,6 @@ module.exports = {
     },
     getDbUsergroupsSchemaColUsername: () => {
         return `${dbConfigs.dbUsergroupsSchemaColUsername}`;
-    },
-    getDbUsergroupsSchemaColId: () => {
-        return `${dbConfigs.dbUsergroupsSchemaColId}`;
     },
     getDbUsergroupsSchemaColUsergroup: () => {
         return `${dbConfigs.dbUsergroupsSchemaColUsergroup}`;
@@ -53,7 +51,7 @@ module.exports = {
         return `${dbConfigs.dbLoginSchema}.${dbConfigs.dbLoginSchemaColUsername}, ${dbConfigs.dbLoginSchema}.${dbConfigs.dbLoginSchemaColEmail}, ${dbConfigs.dbUsergroupsSchema}.${dbConfigs.dbUsergroupsSchemaColUsergroup}, ${dbConfigs.dbLoginSchema}.${dbConfigs.dbLoginSchemaColIsActive}`;
     },
     getDbColFormat_Login: () => {
-        return `${dbConfigs.dbLoginSchemaColId},${dbConfigs.dbLoginSchemaColUsername},${dbConfigs.dbLoginSchemaColPassword},${dbConfigs.dbLoginSchemaColIsActive}`;
+        return `${dbConfigs.dbLoginSchemaColUsername},${dbConfigs.dbLoginSchemaColPassword},${dbConfigs.dbLoginSchemaColIsActive}`;
     },
 
     establishDbConnection: () => {
@@ -79,6 +77,7 @@ module.exports = {
             let rows = await props.query(queryString);
             return ({result: rows});
         } catch (e){
+            console.log('\n***\n'+e+'\n***\n');
             return ({error: e});
         }
     }

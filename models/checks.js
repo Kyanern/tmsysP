@@ -9,8 +9,8 @@ module.exports = {
         return /[A-Za-z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password) && password.length > 7 && password.length < 11;
     },
 
-    checkGroup: async (userid, usergroup) => {
-        var myQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColId()} = '${userid}'`;
+    checkGroup: async (username, usergroup) => {
+        var myQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${username}'`;
         var grp = new Object();
         try{
             let {result, error} = await dbModel.performQuery(myQuery);

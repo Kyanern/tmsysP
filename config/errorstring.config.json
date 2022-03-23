@@ -1,0 +1,12 @@
+{
+    "passwordDiffNew": "Please enter the same password in both New Password fields.",
+    "passwordOldNewSame": "Old password and new password fields cannot contain the same string.",
+    "passwordReqFail": "Please ensure your new password is between 8 to 10 characters. It must also contain at least one alphabet, one number and one special character.",
+    "userPassWrong": "Username or Password is incorrect.",
+    "internalErrorDB": "An Internal Error occurred. (Database)",
+    "accountDisabled": "Account is disabled.",
+    "internalErrorArgon2": "An Internal Error occurred. (argon2)",
+    "passwordOldWrong": "Old Password is incorrect.",
+    "internalErrorWebsite": "An Internal Error occurred. (Website)",
+    "nothingToModify": "There is nothing to modify."
+}

@@ -15,8 +15,29 @@ html
       if success
         p(class="alert alert-success")=success
 
-      if editingUser
-        if canAdmin
+      if canAdmin
+        if isSearching
+          form(class="row g-3" method="get" action="")
+            div(class="col-auto")
+              input(type="text" class="form-control" name="username" placeholder="Search usernames...")
+            div(class="col-auto")
+              button(type="submit" class="btn btn-primary mb-3")="Search"
+          if usernameList
+            table(style="width:100%")
+              for user in usernameList 
+                tr
+                  form(method="post" action="")
+                    td(style="border:1px solid black")
+                      input(type="text", name="username", readonly, class="form-control-plaintext", value=user.username) 
+                    td(style="border:1px solid black")
+                      input(type="email" name="email" readonly class="form-control-plaintext" value=user.email)
+                    td(style="border:1px solid black")
+                      input(type="text" name="usergroup" readonly class="form-control-plaintext" value=user.usergroup)
+                    td(style="border:1px solid black")
+                      input(type="text" name="isactiveDisplay" readonly class="form-control-plaintext" value=(user.isactive?"Enabled":"Disabled"))
+                    td(style="border:1px solid black") 
+                      button(type="submit" class="btn btn-primary mb-3" name="btn_editThisUser" value=true)="Edit User"
+        if isEditing 
           form(action="" method="post")
             div(class="row mb-3")
               label(for="editeeUsername" class="col-sm-2 col-form-label")="Editing User:"
@@ -57,8 +78,9 @@ html
                 input#editeePasswordNew(type="password" name="passwordNew" class="form-control")
             div(class="row")
               div(class="col-sm-10 offset-sm-2")
-                button(type="submit" class="btn btn-primary")="Update User" 
+                button(type="submit" class="btn btn-primary" name="btn_updateUser" value=true)="Update User" 
 
+    
       div(class="row")
         div(class="col")
-          a(href="/edituser_search")="Back to search"
+          a(href="/menu2")="Back to menu"
