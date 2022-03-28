@@ -16,7 +16,7 @@ router.use(async (req, res, next) => {
 });
 
 router.get('/', (req,res)=>{
-    res.render('menu2', {isLoggedIn: req.session.isLoggedIn, canAdmin: req.body.isAdmin});
+    res.render('tmsys', {isLoggedIn: req.session.isLoggedIn, canAdmin: req.body.isAdmin});
 });
 
 module.exports = router;

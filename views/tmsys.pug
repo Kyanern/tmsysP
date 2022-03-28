@@ -33,48 +33,43 @@ html
         h4(class="pb-2 text-decoration-underline")="Open"
         div(class="d-flex flex-row flex-nowrap overflow-auto")
           div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
+              div(class="card-header ")="Task ID"
               h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
+              p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
+              div(class="card-footer ")="Buttons?"
 
       div(class="container-fluid py-2")
         h4(class="pb-2 text-decoration-underline")="To-Do"
         div(class="d-flex flex-row flex-nowrap overflow-auto")
-          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
 
       div(class="container-fluid py-2")
         h4(class="pb-2 text-decoration-underline")="Doing"
         div(class="d-flex flex-row flex-nowrap overflow-auto")
-          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
 
       div(class="container-fluid py-2")
         h4(class="pb-2 text-decoration-underline")="Done"
         div(class="d-flex flex-row flex-nowrap overflow-auto")
-          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
 
       div(class="container-fluid py-2")
         h4(class="pb-2 text-decoration-underline")="Closed"
         div(class="d-flex flex-row flex-nowrap overflow-auto")
-          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              h5(class="card-title ")="Card title"
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
+
+      hr
+      div(class="row")
+        h4="Task Management"
+      div(class="row")
+        a(class="col-lg-2" href="#")="Create Application"
+        a(class="col-lg-2" href="#")="Update Application"
+        a(class="col-lg-2" href="#")="Delete Application"
+      div(class="row")
+        a(class="col-lg-2" href="#")="Create Plan"
+        a(class="col-lg-2" href="#")="Update Plan"
+        a(class="col-lg-2" href="#")="Delete Plan"
+      div(class="row")
+        a(class="col-lg-2" href="#")="Create Task"
+        //-a(class="col-lg-2" href="#")="Update Task"
+        //-a(class="col-lg-2" href="#")="Delete Task"
+
             
       if(canAdmin)
         hr

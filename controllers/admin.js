@@ -16,7 +16,7 @@ router.use(async (req, res, next) => {
 
     let isAdmin = await checksModel.checkGroup(req.session.username, 'admin');
     if(!isAdmin){
-        res.redirect('../menu2');
+        res.redirect('../tmsys');
         return;
     }
     req.body.isAdmin = isAdmin;

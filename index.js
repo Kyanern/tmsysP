@@ -6,7 +6,7 @@ const port = 3000;
 const dbModel = require('./models/db');
 const debugController = require('./controllers/debug');
 const loginController = require('./controllers/login');
-const menu2Controller = require('./controllers/menu2');
+const tmsysController = require('./controllers/tmsys');
 const userController = require('./controllers/user');
 const adminController = require('./controllers/admin');
 const logoutController = require('./controllers/logout');
@@ -20,14 +20,14 @@ dbModel.establishDbConnection();
 
 app.use('/debug', debugController);
 app.use('/login', loginController);
-app.use('/menu2', menu2Controller);
+app.use('/tmsys', tmsysController);
 app.use('/user', userController);
 app.use('/admin', adminController);
 app.use('/logout',logoutController);
 
 app.get('/', (req, res) => {
   if(req.session.isLoggedIn){
-    res.redirect('/menu2');
+    res.redirect('/tmsys');
     return;
   }
   res.redirect('/login');

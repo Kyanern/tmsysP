@@ -55,7 +55,7 @@ router.post('/', async(req,res)=>{
     //login success
     req.session.isLoggedIn = true;
     req.session.username = result[0].username;
-    res.redirect('menu2');
+    res.redirect('tmsys');
 });
 
 module.exports = router;
