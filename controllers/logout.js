@@ -10,7 +10,7 @@ router.use((req, res, next) => {
 router.all('/', async (req, res) => {
     req.session.isLoggedIn = false;
     req.session.username = null;
-    res.redirect('login');
+    res.redirect('/login');
     return;
 });
 

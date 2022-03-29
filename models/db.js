@@ -54,6 +54,14 @@ module.exports = {
         return `${dbConfigs.dbLoginSchemaColUsername},${dbConfigs.dbLoginSchemaColPassword},${dbConfigs.dbLoginSchemaColIsActive}`;
     },
 
+    getDbApplicationSchema: () => {
+        return `${dbConfigs.dbApplicationSchema}`;
+    },
+
+    getDbColFormat_CreateApplication: () => {
+        return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}`;
+    },
+
     establishDbConnection: () => {
         props.connection = mysql.createConnection(getDbConnectionString());
         props.connection.connect(function(err){

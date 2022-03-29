@@ -11,5 +11,15 @@
     "dbLoginSchemaColIsActive": "`isactive`",
     "dbUsergroupsSchema": "nodelogin.usergroups",
     "dbUsergroupsSchemaColUsername": "`username`",
-    "dbUsergroupsSchemaColUsergroup": "`usergroup`"
+    "dbUsergroupsSchemaColUsergroup": "`usergroup`",
+    "dbApplicationSchema": "nodelogin.application",
+    "dbApplicationSchemaColAcronym": "`App_Acronym`",
+    "dbApplicationSchemaColDescription": "`App_Description`",
+    "dbApplicationSchemaColRnumber": "`App_Rnumber`",
+    "dbApplicationSchemaColDateStart": "`App_startDate",
+    "dbApplicationSchemaColDateEnd": "`App_endDate`",
+    "dbApplicationSchemaColPermitOpen": "`App_permit_Open`",
+    "dbApplicationSchemaColPermitToDo": "`App_permit_toDoList`",
+    "dbApplicationSchemaColPermitDoing": "`App_permit_Doing`",
+    "dbApplicationSchemaColPermitDone": "`App_permit_Done`"
 }

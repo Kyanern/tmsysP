@@ -4,19 +4,18 @@ const checksModel = require('../models/checks');
 const dbModel = require('../models/db');
 const argon2Model = require('../models/argon2');
 const errorStr = require('../config/errorstring.config.json');
-const argon2 = require('../models/argon2');
 
 router.use(async (req, res, next) => {
     console.log('Time: ', Date.now());
 
     if(!req.session.isLoggedIn){
-        res.redirect('../login');
+        res.redirect('/login');
         return;
     }
 
     let isAdmin = await checksModel.checkGroup(req.session.username, 'admin');
     if(!isAdmin){
-        res.redirect('../tmsys');
+        res.redirect('/tmsys');
         return;
     }
     req.body.isAdmin = isAdmin;

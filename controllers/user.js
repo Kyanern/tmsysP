@@ -10,7 +10,7 @@ router.use(async (req, res, next) => {
     console.log('Time: ', Date.now());
 
     if(!req.session.isLoggedIn){
-        res.redirect('../login');
+        res.redirect('/login');
         return;
     }
 
