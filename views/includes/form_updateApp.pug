@@ -1,0 +1,31 @@
+//-modal for update application form
+form(method="post" action="")
+  div(class="modal fade" id="updateAppModal" tabindex="-1" aria-labelledby="updateAppModalLabel" aria-hidden="true")
+    div(class="modal-dialog modal-dialog-scrollable")
+      div(class="modal-content")
+          div(class="modal-header")
+            h5(class="modal-title" id="updateAppModalLabel")="Update Application"
+            button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
+          div(class="modal-body")
+            div(class="container")
+                label(for="updateAppAcronym" class="form-label")="Application Acronym:"
+                input#updateAppAcronym(type="text" name="updateAppAcronym" class="form-control" value=updateAppAcronym)
+                label(for="updateAppDescription" class="form-label")="Application Description:"
+                textarea#updateAppDescription(rows="3" name="updateAppDescription" class="form-control" value=updateAppDescription)
+                label(for="updateAppDateStart" class="form-label")="Start Date:"
+                input#updateAppDateStart(type="date" name="updateAppDateStart" class="form-control" value=updateAppDateStart)
+                label(for="updateAppDateEnd" class="form-label")="End Date:"
+                input#updateAppDateEnd(type="date" name="updateAppDateEnd" class="form-control" value=updateAppDateEnd)
+                hr
+                label(for="updateAppPermitOpen" class="form-label")="Grant 'Open' state permissions to these usergroups: (comma-delimited)"
+                input#updateAppPermitOpen(type="text" name="updateAppPermitOpen" class="form-control" value=updateAppPermitOpen)
+                label(for="updateAppPermitToDo" class="form-label")="Grant 'ToDo' state permissions to these usergroups: (comma-delimited)"
+                input#updateAppPermitToDo(type="text" name="updateAppPermitToDo" class="form-control" value=updateAppPermitToDo)
+                label(for="updateAppPermitDoing" class="form-label")="Grant 'Doing' state permissions to these usergroups: (comma-delimited)"
+                input#updateAppPermitDoing(type="text" name="updateAppPermitDoing" class="form-control" value=updateAppPermitDoing)
+                label(for="updateAppPermitDone" class="form-label")="Grant 'Done' state permissions to these usergroups: (comma-delimited)"
+                input#updateAppPermitDone(type="text" name="updateAppPermitDone" class="form-control" value=updateAppPermitDone)
+          div(class="modal-footer")
+            button(type="reset" class="btn btn-danger" data-bs-dismiss="modal")="Close And Discard"
+            button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"
+            button(type="submit" class="btn btn-primary" name="btn_updateApp" value=true)="Update Application"

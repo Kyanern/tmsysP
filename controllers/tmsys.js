@@ -43,11 +43,12 @@ router.post('/',
                 //TODO: add in isRoles here
             }
             if(error){
+                console.log('\n***\n'+error+'\n***\n');
                 options.error = errorStr.internalErrorDB;
                 res.render('tmsys', options);
                 return;
             }
-            options.successString = `Application ${createAppAcronym} successfully created`;
+            options.success = `Application ${createAppAcronym} successfully created`;
             res.render('tmsys', options);
         }
     }

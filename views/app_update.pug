@@ -1,0 +1,40 @@
+html
+  head 
+    title="Task Management System"
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
+  body
+    
+    div(class="container")
+      h2(class="pb-2 border-bottom")="Task Management System"
+        if isLoggedIn
+            small 
+              a(href="/logout")="Logout"
+
+      if error
+        p(class="alert alert-danger")=error
+
+      if success
+        p(class="alert alert-success")=success
+
+      if canUpdateApp 
+        form(class="row g-3" method="get" action="")
+            div(class="col-auto")
+              input(type="text" class="form-control" name="app_acronym" placeholder="Search applications by acronym...")
+            div(class="col-auto")
+              button(type="submit" class="btn btn-primary mb-3" name="btn_searchApplication" value=true)="Search"
+        if appList
+            table(style="width:100%")
+              for app in appList 
+                tr
+                  form(method="post" action="")
+                    td(style="border:1px solid black")
+                      input(type="text", name="app_acronym", readonly, class="form-control-plaintext", value=app.acronym) 
+                    td(style="border:1px solid black")
+                      input(type="textarea" name="app_description" readonly class="form-control-plaintext" value=app.description)
+                    td(style="border:1px solid black")
+                      input(type="date" name="app_startDate" readonly class="form-control-plaintext" value=app.dateStart)
+                    td(style="border:1px solid black")
+                      input(type="date" name="app_endDate" readonly class="form-control-plaintext" value=app.dateEnd)
+                    td(style="border:1px solid black") 
+                      button(type="submit" class="btn btn-primary mb-3" name="btn_changeThisApplication" value=true)="Update Details"
