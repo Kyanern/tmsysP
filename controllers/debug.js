@@ -18,7 +18,15 @@ router.get('/',
         }
         else{
             if(btn === "btn_AJAXPerformSelectQuery"){
-                res.send({aDummyJSONProp: "a dummy json value string"});
+                // res.send({aDummyJSONProp: "a dummy json value string"});
+                
+                let toSend = {
+                    aDummyJSONProp: "a dummy json value string",
+                    success: "a JSON was received!"
+                };
+                res.send(toSend);
+
+                // res.render('debug', {success: 'btn_AJAXPerformSelectQuery!'}); // WILL FAIL because client expects a JSON object
             }
         }
     },

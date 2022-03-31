@@ -21,5 +21,21 @@
     "dbApplicationSchemaColPermitOpen": "`App_permit_Open`",
     "dbApplicationSchemaColPermitToDo": "`App_permit_toDoList`",
     "dbApplicationSchemaColPermitDoing": "`App_permit_Doing`",
-    "dbApplicationSchemaColPermitDone": "`App_permit_Done`"
+    "dbApplicationSchemaColPermitDone": "`App_permit_Done`",
+    "dbPlanSchema": "nodelogin.plan",
+    "dbPlanSchemaColMVPName": "`Plan_MVP_name`",
+    "dbPlanSchemaColDateStart": "`Plan_startDate`",
+    "dbPlanSchemaColDateEnd": "`Plan_endDate`",
+    "dbPlanSchemaColAcronym": "`Plan_app_Acronym`",
+    "dbTaskSchema": "nodelogin.task",
+    "dbTaskSchemaColName": "Task_name",
+    "dbTaskSchemaColDescription": "Task_description",
+    "dbTaskSchemaColNotes": "Task_notes",
+    "dbTaskSchemaColID": "Task_id",
+    "dbTaskSchemaColPlan": "Task_plan",
+    "dbTaskSchemaColAcronym": "Task_app_Acronym",
+    "dbTaskSchemaColState": "Task_state",
+    "dbTaskSchemaColCreator": "Task_creator",
+    "dbTaskSchemaColOwner": "Task_owner",
+    "dbTaskSchemaColDateCreate": "Task_createDate"
 }

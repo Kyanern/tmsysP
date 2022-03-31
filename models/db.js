@@ -44,6 +44,87 @@ module.exports = {
         return `${dbConfigs.dbUsergroupsSchemaColUsergroup}`;
     },
 
+    getDbApplicationSchema: () => {
+        return `${dbConfigs.dbApplicationSchema}`;
+    },
+    getDbApplicationSchemaColAcronym: () => {
+        return `${dbConfigs.dbApplicationSchemaColAcronym}`;
+    },
+    getDbApplicationSchemaColDescription: () => {
+        return `${dbConfigs.dbApplicationSchemaColDescription}`;
+    },
+    getDbApplicationSchemaColRnumber: () => {
+        return `${dbConfigs.dbApplicationSchemaColRnumber}`;
+    },
+    getDbApplicationSchemaColDateStart: () => {
+        return `${dbConfigs.dbApplicationSchemaColDateStart}`;
+    },
+    getDbApplicationSchemaColDateEnd: () => {
+        return `${dbConfigs.dbApplicationSchemaColDateEnd}`;
+    },
+    getDbApplicationSchemaColPermitOpen: () => {
+        return `${dbConfigs.dbApplicationSchemaColPermitOpen}`;
+    },
+    getDbApplicationSchemaColPermitToDo: () => {
+        return `${dbConfigs.dbApplicationSchemaColPermitToDo}`;
+    },
+    getDbApplicationSchemaColPermitDoing: () => {
+        return `${dbConfigs.dbApplicationSchemaColPermitDoing}`;
+    },
+    getDbApplicationSchemaColPermitDone: () => {
+        return `${dbConfigs.dbApplicationSchemaColPermitDone}`;
+    },
+
+    getDbPlanSchema: () => {
+        return `${dbConfigs.dbPlanSchema}`;
+    },
+    getDbPlanSchemaColMVPName: () => {
+        return `${dbConfigs.dbPlanSchemaColMVPName}`;
+    },
+    getDbPlanSchemaColDateStart: () => {
+        return `${dbConfigs.dbPlanSchemaColDateStart}`;
+    },
+    getDbPlanSchemaColDateEnd: () => {
+        return `${dbConfigs.dbPlanSchemaColDateEnd}`;
+    },
+    getDbPlanSchemaColAcronym: () => {
+        return `${dbConfigs.dbPlanSchemaColAcronym}`;
+    },
+
+    getDbTaskSchema: () => {
+        return `${dbConfigs.dbTaskSchema}`;
+    },
+    getDbTaskSchemaColName: () => {
+        return `${dbConfigs.dbTaskSchemaColName}`;
+    },
+    getDbTaskSchemaColDescription: () => {
+        return `${dbConfigs.dbTaskSchemaColDescription}`;
+    },
+    getDbTaskSchemaColNotes: () => {
+        return `${dbConfigs.dbTaskSchemaColNotes}`;
+    },
+    getDbTaskSchemaColID: () => {
+        return `${dbConfigs.dbTaskSchemaColID}`;
+    },
+    getDbTaskSchemaColPlan: () => {
+        return `${dbConfigs.dbTaskSchemaColPlan}`;
+    },
+    getDbTaskSchemaColAcronym: () => {
+        return `${dbConfigs.dbTaskSchemaColAcronym}`;
+    },
+    getDbTaskSchemaColState: () => {
+        return `${dbConfigs.dbTaskSchemaColState}`;
+    },
+    getDbTaskSchemaColCreator: () => {
+        return `${dbConfigs.dbTaskSchemaColCreator}`;
+    },
+    getDbTaskSchemaColOwner: () => {
+        return `${dbConfigs.dbTaskSchemaColOwner}`;
+    },
+    getDbTaskSchemaColDateCreate: () => {
+        return `${dbConfigs.dbTaskSchemaColDateCreate}`;
+    },
+
     getDbColFormat_CreateNewUser: () => { 
         return `${dbConfigs.dbLoginSchemaColUsername},${dbConfigs.dbLoginSchemaColPassword},${dbConfigs.dbLoginSchemaColEmail}`;
     },
@@ -53,14 +134,14 @@ module.exports = {
     getDbColFormat_Login: () => {
         return `${dbConfigs.dbLoginSchemaColUsername},${dbConfigs.dbLoginSchemaColPassword},${dbConfigs.dbLoginSchemaColIsActive}`;
     },
-
-    getDbApplicationSchema: () => {
-        return `${dbConfigs.dbApplicationSchema}`;
-    },
-
     getDbColFormat_CreateApplication: () => {
         return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}`;
     },
+    getDbColFormat_AppPlanTaskJSON_Apps_SELECT: () => {
+        //the column format for the SELECT part of the query of apps that user can view
+        return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}`
+    },
+    
 
     establishDbConnection: () => {
         props.connection = mysql.createConnection(getDbConnectionString());

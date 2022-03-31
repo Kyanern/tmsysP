@@ -44,6 +44,10 @@ html(style="height: -webkit-fill-available")
           console.log( "window loaded" );
       });
 
+    if error
+      p(class="alert alert-danger")=error
+    if success
+      p(class="alert alert-success")=success
     h2(class="font-weight-light")="Experimenting with jQuery (AJAX)"
     div(class="container border")
       button#btn_AJAXPerformSelectQuery(type="button" class="btn btn-primary")="Perform Select Query on accounts table"
