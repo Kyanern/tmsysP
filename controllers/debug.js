@@ -10,7 +10,7 @@ router.use((req, res, next) => {
 });
 
 router.get('/', 
-    (req,res,next)=>{
+    async (req,res,next)=>{
     //this callback handles the AJAX request from btn_selectQuery (#btn_AJAXPerformSelectQuery)
         let {btn} = req.query;
         if(!btn){
@@ -20,13 +20,29 @@ router.get('/',
             if(btn === "btn_AJAXPerformSelectQuery"){
                 // res.send({aDummyJSONProp: "a dummy json value string"});
                 
-                let toSend = {
-                    aDummyJSONProp: "a dummy json value string",
-                    success: "a JSON was received!"
-                };
-                res.send(toSend);
+                // let toSend = {
+                //     aDummyJSONProp: "a dummy json value string",
+                //     success: "a JSON was received!"
+                // };
+                // res.send(toSend);
 
                 // res.render('debug', {success: 'btn_AJAXPerformSelectQuery!'}); // WILL FAIL because client expects a JSON object
+                let query = 'SELECT DATE(`dates`) AS \'date\' FROM sandbox.dates;';
+                let retq;
+                try {
+                    retq = await dbModel.performQuery(query);
+                    let rows = retq.result;
+                    for(let i = 0; i < rows.length; i++){
+                        // console.log(typeof rows[i].date);
+                        // console.log(rows[i].date);
+                        // console.log(rows[i].date.toDateString());
+                        rows[i].date = (rows[i].date.toISOString().split('T'))[0];
+                    }
+                } catch (error) {
+                    console.log('\n***\n'+error+'\n***\n');
+                } finally {
+                    res.send(retq);
+                }
             }
         }
     },
@@ -36,7 +52,7 @@ router.get('/',
 );
 
 router.post('/', async (req,res)=>{
-
+    res.render('debug', {success: 'POSTed!'});
 });
 
 module.exports = router;
