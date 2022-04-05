@@ -30,31 +30,31 @@ html
             button(type="submit" class="btn btn-primary mb-3")="Search"
           div(class="col-auto")="(By acronym; leave blank to search all)"
         if appList
-          table(style="width:100%")
-            for app in appList 
-              tr
-                form(method="post" action="")
-                  td(style="border:1px solid black")
-                    input(type="text", name="app_acronym", readonly, class="form-control-plaintext", value=app.App_Acronym) 
-                  td(style="border:1px solid black")
-                    textarea(row="6" name="app_description" readonly class="form-control-plaintext" value=app.App_Description)=app.App_Description
-                  td(style="border:1px solid black")
-                    input(type="date" name="app_startDate" readonly class="form-control-plaintext" value=app.App_startDate)
-                  td(style="border:1px solid black")
-                    input(type="date" name="app_endDate" readonly class="form-control-plaintext" value=app.App_endDate)
-                  td(style="border:1px solid black")
-                    input(type="text" name="app_permitOpen" readonly class="form-control-plaintext" value=app.App_permit_Open)
-                  td(style="border:1px solid black")
-                    input(type="text" name="app_permitToDo" readonly class="form-control-plaintext" value=app.App_permit_toDoList)
-                  td(style="border:1px solid black")
-                    input(type="text" name="app_permitDoing" readonly class="form-control-plaintext" value=app.App_permit_Doing)
-                  td(style="border:1px solid black")
-                    input(type="text" name="app_permitDone" readonly class="form-control-plaintext" value=app.App_permit_Done)
-                  td(style="border:1px solid black") 
-                    button(type="submit" class="btn btn-primary mb-3" name="btn_editThisApplication" value=true)="Edit"
-                  td(style="border:1px solid black") 
-                    button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deleteAppModal" data-bs-victim=app.App_Acronym name="btn_deleteThisApp" value=app.App_Acronym)="Delete"
-                  include includes/modal_confirmAppDelete.pug
+          for app in appList 
+            form(method="post" action="")
+              //- TODO: bootstrap accordions that give info on click + buttons available based on usergroup
+            //-
+              td(style="border:1px solid black")
+                input(type="text", name="app_acronym", readonly, class="form-control-plaintext", value=app.App_Acronym) 
+              td(style="border:1px solid black")
+                textarea(row="6" name="app_description" readonly class="form-control-plaintext" value=app.App_Description)=app.App_Description
+              td(style="border:1px solid black")
+                input(type="date" name="app_startDate" readonly class="form-control-plaintext" value=app.App_startDate)
+              td(style="border:1px solid black")
+                input(type="date" name="app_endDate" readonly class="form-control-plaintext" value=app.App_endDate)
+              td(style="border:1px solid black")
+                input(type="text" name="app_permitOpen" readonly class="form-control-plaintext" value=app.App_permit_Open)
+              td(style="border:1px solid black")
+                input(type="text" name="app_permitToDo" readonly class="form-control-plaintext" value=app.App_permit_toDoList)
+              td(style="border:1px solid black")
+                input(type="text" name="app_permitDoing" readonly class="form-control-plaintext" value=app.App_permit_Doing)
+              td(style="border:1px solid black")
+                input(type="text" name="app_permitDone" readonly class="form-control-plaintext" value=app.App_permit_Done)
+              td(style="border:1px solid black") 
+                button(type="submit" class="btn btn-primary mb-3" name="btn_editThisApplication" value=true)="Edit"
+              td(style="border:1px solid black") 
+                button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deleteAppModal" data-bs-victim=app.App_Acronym name="btn_deleteThisApp" value=app.App_Acronym)="Delete"
+              include includes/modal_confirmAppDelete.pug
       if isEditingApplication
         div(class="row")
           a(href="/applications")="Back to search"
