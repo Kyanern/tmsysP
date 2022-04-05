@@ -135,7 +135,7 @@ module.exports = {
         return `${dbConfigs.dbLoginSchemaColUsername},${dbConfigs.dbLoginSchemaColPassword},${dbConfigs.dbLoginSchemaColIsActive}`;
     },
     getDbColFormat_CreateApplication: () => {
-        return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}`;
+        return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColRnumber}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}`;
     },
     getDbColFormat_ListApplications: () => {
         return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}`;

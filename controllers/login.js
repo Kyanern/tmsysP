@@ -6,7 +6,7 @@ const errorStr = require('../config/errorstring.config.json');
 
 // middleware that is specific to this router
 router.use((req, res, next) => {
-    console.log('Time: ', Date.now());
+    // console.log('Time: ', Date.now());
     next();
 });
 
@@ -22,7 +22,7 @@ router.post('/', async(req,res)=>{
     }
     var myQuery = `SELECT ${dbModel.getDbColFormat_Login()} FROM ${dbModel.getDbLoginSchema()} WHERE ${dbModel.getDbLoginSchemaColUsername()} = '${username}'`;
     let {result, error} = await dbModel.performQuery(myQuery);
-    console.log('\n***\n' + typeof result[0].isactive + '\n***\n');
+    // console.log('\n***\n' + typeof result[0].isactive + '\n***\n');
     if(error){
         //console.log('[ERROR] LOGIN:\n' + result.error);
         res.render('login', {error:errorStr.internalErrorDB});

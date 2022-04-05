@@ -6,7 +6,7 @@ const argon2Model = require('../models/argon2');
 const errorStr = require('../config/errorstring.config.json');
 
 router.use(async (req, res, next) => {
-    console.log('Time: ', Date.now());
+    // console.log('Time: ', Date.now());
 
     if(!req.session.isLoggedIn){
         res.redirect('/login');
@@ -81,9 +81,9 @@ router.get('/useredit', async (req,res)=>{
     let retQ = await dbModel.performQuery(myQuery);
     let error = retQ.error;
     let rows = retQ.result;
-    console.log('\n***\n' + rows[0].isactive + '\n***\n');
-    console.log('\n***\n' + typeof rows[0].isactive + '\n***\n');
-    console.log('\n***\n' + typeof req.body + '\n***\n');
+    // console.log('\n***\n' + rows[0].isactive + '\n***\n');
+    // console.log('\n***\n' + typeof rows[0].isactive + '\n***\n');
+    // console.log('\n***\n' + typeof req.body + '\n***\n');
     if(error){
         //console.log('\n***\n' + error + '\n***\n');
         res.render('admin_useredit', {
@@ -194,7 +194,7 @@ router.post('/useredit',
                 myQuery += myStack.pop();
                 if(myStack.length) myQuery += ',';
             }
-            myQuery += `WHERE ${dbModel.getDbLoginSchemaColUsername()}='${username}'`;
+            myQuery += ` WHERE ${dbModel.getDbLoginSchemaColUsername()}='${username}'`;
 
             //perform query
             let retQ = await dbModel.performQuery(myQuery);

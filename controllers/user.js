@@ -7,7 +7,7 @@ const errorStr = require('../config/errorstring.config.json');
 
 // middleware that is specific to this router
 router.use(async (req, res, next) => {
-    console.log('Time: ', Date.now());
+    // console.log('Time: ', Date.now());
 
     if(!req.session.isLoggedIn){
         res.redirect('/login');

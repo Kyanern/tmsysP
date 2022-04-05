@@ -9,22 +9,24 @@ form(method="post" action="")
           div(class="modal-body")
             div(class="container")
                 label(for="createAppAcronym" class="form-label")="Application Acronym:"
-                input#createAppAcronym(type="text" name="createAppAcronym" class="form-control" value=createAppAcronym)
+                input#createAppAcronym(type="text" name="createAppAcronym" class="form-control" )
+                label(for="createAppNumber" class="form-label")="Application Running Number Start Value (min 1):"
+                input#createAppNumber(type="number" name="createAppNumber" class="form-control" value="1" min="1")
                 label(for="createAppDescription" class="form-label")="Application Description:"
-                textarea#createAppDescription(rows="3" name="createAppDescription" class="form-control" value=createAppDescription)
+                textarea#createAppDescription(rows="3" name="createAppDescription" class="form-control" )
                 label(for="createAppDateStart" class="form-label")="Start Date:"
-                input#createAppDateStart(type="date" name="createAppDateStart" class="form-control" value=createAppDateStart)
+                input#createAppDateStart(type="date" name="createAppDateStart" class="form-control" )
                 label(for="createAppDateEnd" class="form-label")="End Date:"
-                input#createAppDateEnd(type="date" name="createAppDateEnd" class="form-control" value=createAppDateEnd)
+                input#createAppDateEnd(type="date" name="createAppDateEnd" class="form-control" )
                 hr
                 label(for="createAppPermitOpen" class="form-label")="Grant 'Open' state permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitOpen(type="text" name="createAppPermitOpen" class="form-control" value=createAppPermitOpen)
+                input#createAppPermitOpen(type="text" name="createAppPermitOpen" class="form-control" )
                 label(for="createAppPermitToDo" class="form-label")="Grant 'ToDo' state permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitToDo(type="text" name="createAppPermitToDo" class="form-control" value=createAppPermitToDo)
+                input#createAppPermitToDo(type="text" name="createAppPermitToDo" class="form-control" )
                 label(for="createAppPermitDoing" class="form-label")="Grant 'Doing' state permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitDoing(type="text" name="createAppPermitDoing" class="form-control" value=createAppPermitDoing)
+                input#createAppPermitDoing(type="text" name="createAppPermitDoing" class="form-control" )
                 label(for="createAppPermitDone" class="form-label")="Grant 'Done' state permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitDone(type="text" name="createAppPermitDone" class="form-control" value=createAppPermitDone)
+                input#createAppPermitDone(type="text" name="createAppPermitDone" class="form-control" )
           div(class="modal-footer")
             button(type="reset" class="btn btn-danger" data-bs-dismiss="modal")="Close And Discard"
             button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"

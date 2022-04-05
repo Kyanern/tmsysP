@@ -1,0 +1,20 @@
+//- modal for create plan
+form(method="post" action="")
+  div(class="modal fade" id="createPlanModal" tabindex="-1" aria-labelledby="createPlanModalLabel" aria-hidden="true")
+    div(class="modal-dialog modal-dialog-scrollable")
+      div(class="modal-content")
+          div(class="modal-header")
+            h5(class="modal-title" id="createPlanModalLabel")="Create Plan"
+            button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
+          div(class="modal-body")
+            div(class="container")
+                label(for="createPlanMVPName" class="form-label")="Plan MVP Name:"
+                input#createPlanMVPName(type="text" name="createPlanMVPName" class="form-control" )
+                label(for="createPlanDateStart" class="form-label")="Start Date:"
+                input#createPlanDateStart(type="date" name="createPlanDateStart" class="form-control" )
+                label(for="createPlanDateEnd" class="form-label")="End Date:"
+                input#createPlanDateEnd(type="date" name="createPlanDateEnd" class="form-control" )
+          div(class="modal-footer")
+            button(type="reset" class="btn btn-danger" data-bs-dismiss="modal")="Close And Discard"
+            button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"
+            button(type="submit" class="btn btn-primary" name="btn_createPlan" value=true)="Create Plan"

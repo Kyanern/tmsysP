@@ -6,14 +6,14 @@ const errorStr = require('../config/errorstring.config.json');
 
 // middleware that is specific to this router
 router.use(async (req, res, next) => {
-    console.log('Time: ', Date.now());
+    // console.log('Time: ', Date.now());
 
     if(!req.session.isLoggedIn){
         res.redirect('/login');
         return;
     }
     req.body.isAdmin = await checksModel.checkGroup(req.session.username, 'admin');
-    console.log(req.body);
+    // console.log(req.body);
     next();
 });
 
@@ -24,17 +24,17 @@ router.get('/',
 );
 
 router.post('/', 
+    //handles create application form button
     async (req,res,next)=>{
-        //handles create application form button
         let {btn_createApp} = req.body;
         if(!btn_createApp){
             next();
         } else {
-            let {createAppAcronym, createAppDescription, createAppDateStart, createAppDateEnd} = req.body;
+            let {createAppAcronym, createAppNumber, createAppDescription, createAppDateStart, createAppDateEnd} = req.body;
             let {createAppPermitOpen, createAppPermitToDo, createAppPermitDoing, createAppPermitDone} = req.body;
 
             let myQuery = `INSERT INTO ${dbModel.getDbApplicationSchema()}(${dbModel.getDbColFormat_CreateApplication()})`;
-            myQuery += ` VALUES('${createAppAcronym}','${createAppDescription}','${createAppDateStart}','${createAppDateEnd}','${createAppPermitOpen}','${createAppPermitToDo}','${createAppPermitDoing}','${createAppPermitDone}')`;
+            myQuery += ` VALUES('${createAppAcronym}', '${createAppNumber}', '${createAppDescription}','${createAppDateStart}','${createAppDateEnd}','${createAppPermitOpen}','${createAppPermitToDo}','${createAppPermitDoing}','${createAppPermitDone}')`;
             let retQ = await dbModel.performQuery(myQuery);
             let error= retQ.error;
             let options = {
@@ -43,7 +43,7 @@ router.post('/',
                 //TODO: add in isRoles here
             }
             if(error){
-                console.log('\n***\n'+error+'\n***\n');
+                // console.log('\n***\n'+error+'\n***\n');
                 options.error = errorStr.internalErrorDB;
                 res.render('tmsys', options);
                 return;
@@ -51,6 +51,10 @@ router.post('/',
             options.success = `Application ${createAppAcronym} successfully created`;
             res.render('tmsys', options);
         }
+    },
+    //handles create plan form button
+    async (req,res,next)=>{
+
     }
 )
 

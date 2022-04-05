@@ -5,7 +5,7 @@ const argon2Model = require('../models/argon2');
 
 // middleware that is specific to this router
 router.use((req, res, next) => {
-    console.log('Time: ', Date.now());
+    // console.log('Time: ', Date.now());
     next();
 });
 
@@ -39,7 +39,7 @@ router.get('/',
                         rows[i].date = (rows[i].date.toISOString().split('T'))[0];
                     }
                 } catch (error) {
-                    console.log('\n***\n'+error+'\n***\n');
+                    console.dir(error);
                 } finally {
                     res.send(retq);
                 }
