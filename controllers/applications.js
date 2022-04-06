@@ -24,23 +24,27 @@ let renderAppList = async (req, res, finalError, finalSuccess) => {
   }
   let {usergroup} = retgrp.result[0];
   usergroup = usergroup.replaceAll(',','|');
-
+  usergroup = `(?:^|,)(${usergroup})(?:,|$)`;
+  
   //query substrings
+  //SUGGESTION: make a App_permit_View column and REGEXP_LIKE only that column. Create application code need to change also.
   let qSELECTFROM = `SELECT ${dbModel.getDbColFormat_ListApplications()} FROM ${dbModel.getDbApplicationSchema()} `;
   let qWHERE = `WHERE `;
   let qOR = `OR `;
   let qAND = `AND `;
-  let qCond1 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitOpen()}, '(?:^|,)(${usergroup})(?:,|$)') `;
-  let qCond2 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitToDo()}, '(?:^|,)(${usergroup})(?:,|$)') `;
-  let qCond3 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitDoing()}, '(?:^|,)(${usergroup})(?:,|$)') `;
-  let qCond4 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitDone()}, '(?:^|,)(${usergroup})(?:,|$)') `;
-  let qCond5 = `${dbModel.getDbApplicationSchemaColAcronym()} LIKE '%${app_acronym}%' `;
+  let qCond1 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitOpen()}, '${usergroup}') `;
+  let qCond2 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitToDo()}, '${usergroup}') `;
+  let qCond3 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitDoing()}, '${usergroup}') `;
+  let qCond4 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitDone()}, '${usergroup}') `;
+  let qCond5 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreatePlan()}, '${usergroup}') `;
+  let qCond6 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreateTask()}, '${usergroup}') `;
+  let qCond7 = `${dbModel.getDbApplicationSchemaColAcronym()} LIKE '%${app_acronym}%' `;
   //construct query
   //if no search term display all
-  let myQuery = qSELECTFROM + qWHERE + '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + ')';
+  let myQuery = qSELECTFROM + qWHERE + '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + qOR + qCond5 + qOR + qCond6 + ')';
   //console.log(myQuery);
   if(app_acronym){
-    myQuery += qAND + qCond5
+    myQuery += qAND + qCond7
   }
   let retQ = await dbModel.performQuery(myQuery);
   let error = retQ.error;
@@ -57,20 +61,24 @@ let renderAppList = async (req, res, finalError, finalSuccess) => {
   }  
   // console.log('\n***\n' + rows + '\n***\n');
   // console.log('\n***\n' + rows.length + '\n***\n');
-
-  // we have to translate between mysql and html date formats. in my particular case
-  // mysql returns me dates in the ISO format (e.g. 2022-03-31T16:00:00.000Z)
-  // as a Date object
-  // but i have to pass html the date without the T-part.
-  // there are a few ways to extract the date...
-  // 2022 04 01 : toString then split. this might break if mysql changes formats.
-
+  
+  let usergroupRX = new RegExp(usergroup);
   for(let i = 0; i < rows.length; i++){
+      // we have to translate between mysql and html date formats. in my particular case
+      // mysql returns me dates in the ISO format (e.g. 2022-03-31T16:00:00.000Z)
+      // as a Date object
+      // but i have to pass html the date without the T-part.
+      // there are a few ways to extract the date...
+      // 2022 04 01 : toString then split. this might break if mysql changes formats.
       let temp = (rows[i].App_startDate.toISOString().split('T'))[0];
       rows[i].App_startDate = temp;
       temp = (rows[i].App_endDate.toISOString().split('T'))[0];
       rows[i].App_endDate = temp;
+      //for determining whether we should display the 'create' buttons
+      rows[i].canCreatePlan = usergroupRX.test(rows[i].App_permit_createPlan);
+      rows[i].canCreateTask = usergroupRX.test(rows[i].App_permit_createTask);
   }
+  console.dir(rows);
 
   res.render('app_list', {
       isLoggedIn: req.session.isLoggedIn,
@@ -108,7 +116,7 @@ router.post('/',
       next();
     } else{
       let {app_acronym,app_description,app_startDate,app_endDate} = req.body;
-      let {app_permitOpen,app_permitToDo,app_permitDoing,app_permitDone} = req.body;
+      let {app_permitOpen,app_permitToDo,app_permitDoing,app_permitDone, app_permitCreatePlan, app_permitCreateTask} = req.body;
       let options = {
         isLoggedIn : req.session.isLoggedIn,
         canUpdateApp: req.body.isProjectLead,
@@ -120,7 +128,9 @@ router.post('/',
         App_permit_Open: app_permitOpen,
         App_permit_toDoList: app_permitToDo,
         App_permit_Doing: app_permitDoing,
-        App_permit_Done: app_permitDone
+        App_permit_Done: app_permitDone,
+        App_permit_createPlan: app_permitCreatePlan,
+        App_permit_createTask: app_permitCreateTask
       }
       res.render('app_list',options);
     }
@@ -132,9 +142,9 @@ router.post('/',
       next();
     } else{
       let {App_Acronym, App_Description, App_startDate, App_endDate} = req.body;
-      let {App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done} = req.body;
+      let {App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done, App_permit_createPlan, App_permit_createTask} = req.body;
       let {App_Description_new, App_startDate_new, App_endDate_new} = req.body;
-      let {App_permit_Open_new, App_permit_toDoList_new, App_permit_Doing_new, App_permit_Done_new} = req.body;
+      let {App_permit_Open_new, App_permit_toDoList_new, App_permit_Doing_new, App_permit_Done_new, App_permit_createPlan_new, App_permit_createTask_new} = req.body;
 
       //these references will be used when the mySQL query is successful
       let disp_Description = App_Description;
@@ -144,6 +154,8 @@ router.post('/',
       let disp_permit_toDoList = App_permit_toDoList;
       let disp_permit_Doing = App_permit_Doing;
       let disp_permit_Done = App_permit_Done;
+      let disp_permit_createPlan = App_permit_createPlan;
+      let disp_permit_createTask = App_permit_createTask;
       //prepare query construction,
       //verify information and append to query,
       //send query if all ok
@@ -163,27 +175,37 @@ router.post('/',
       if(App_endDate !== App_endDate_new){
         myStack.push(`${dbModel.getDbApplicationSchemaColDateEnd()}='${App_endDate_new}'`);
         disp_endDate = App_endDate_new;
-        //console.log("pushed new start date into stack");
+        //console.log("pushed new end date into stack");
       }
       if(App_permit_Open !== App_permit_Open_new){
         myStack.push(`${dbModel.getDbApplicationSchemaColPermitOpen()}='${App_permit_Open_new}'`);
         disp_permit_Open = App_permit_Open_new;
-        //console.log("pushed new start date into stack");
+        //console.log("pushed new permit_open into stack");
       }
       if(App_permit_toDoList !== App_permit_toDoList_new){
         myStack.push(`${dbModel.getDbApplicationSchemaColPermitToDo()}='${App_permit_toDoList_new}'`);
         disp_permit_toDoList = App_permit_toDoList_new;
-        //console.log("pushed new start date into stack");
+        //console.log("pushed new permit_todo into stack");
       }
       if(App_permit_Doing !== App_permit_Doing_new){
         myStack.push(`${dbModel.getDbApplicationSchemaColPermitDoing()}='${App_permit_Doing_new}'`);
         disp_permit_Doing = App_permit_Doing_new;
-        //console.log("pushed new start date into stack");
+        //console.log("pushed new permit_doing into stack");
       }
       if(App_permit_Done !== App_permit_Done_new){
         myStack.push(`${dbModel.getDbApplicationSchemaColPermitDone()}='${App_permit_Done_new}'`);
         disp_permit_Done = App_permit_Done_new;
-        //console.log("pushed new start date into stack");
+        //console.log("pushed new permit_done into stack");
+      }
+      if(App_permit_createPlan !== App_permit_createPlan_new){
+        myStack.push(`${dbModel.getDbApplicationSchemaColPermitCreatePlan()}='${App_permit_createPlan_new}'`);
+        disp_permit_createPlan = App_permit_createPlan_new;
+        //console.log("pushed new permit_createPlan into stack");
+      }
+      if(App_permit_createTask !== App_permit_createTask_new){
+        myStack.push(`${dbModel.getDbApplicationSchemaColPermitCreateTask()}='${App_permit_createTask_new}'`);
+        disp_permit_createTask = App_permit_createTask_new;
+        //console.log("pushed new permit_createTask into stack");
       }
 
       while(myStack.length){  //might be dangerous...?
@@ -211,6 +233,8 @@ router.post('/',
           App_permit_toDoList: App_permit_toDoList,
           App_permit_Doing: App_permit_Doing,
           App_permit_Done: App_permit_Done,
+          App_permit_createPlan: App_permit_createPlan,
+          App_permit_createTask: App_permit_createTask,
           error: errorStr.internalErrorDB
         }
         res.render('app_list',options);
@@ -228,6 +252,8 @@ router.post('/',
         App_permit_toDoList: disp_permit_toDoList,
         App_permit_Doing: disp_permit_Doing,
         App_permit_Done: disp_permit_Done,
+        App_permit_createPlan: disp_permit_createPlan,
+        App_permit_createTask: disp_permit_createTask,
         success: `'${App_Acronym}' successfully updated.`
       }
       res.render('app_list',options);
@@ -241,7 +267,6 @@ router.post('/',
     } else {
       console.log('Attempting to delete application: ' + btn_deleteApp);
       //note that we aren't doing some safety checks.
-      //e.g. no checks for no rows deleted, etc.
       let myQuery = `DELETE FROM ${dbModel.getDbApplicationSchema()} WHERE ${dbModel.getDbApplicationSchemaColAcronym()} = '${btn_deleteApp}';`;
       let retQ = await dbModel.performQuery(myQuery);
       let {error, result} = retQ;

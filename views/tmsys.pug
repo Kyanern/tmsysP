@@ -10,8 +10,7 @@ html
     div(class="container")
       h2(class="pb-2 border-bottom")="Task Management System"
         if isLoggedIn
-            small 
-              a(href="/logout")="Logout"
+          a(class="btn btn-link" href="/logout")="Logout"
 
       if error
         p(class="alert alert-danger")=error
@@ -92,35 +91,28 @@ html
       hr
       div(class="row")
         h4="Task Management"
-      div(class="row")
+      div(class="row g-3")
         if canAdmin
-          button(class="col-lg-2 btn btn-link" data-bs-toggle="modal" type="button" data-bs-target="#createAppModal")="Create Application"
-        a(class="col-lg-2 btn btn-link" href="/applications" )="View/Edit Applications"
-        //-a(class="col-lg-2 btn btn-link" href="#" role="button")="Delete Application"
-      div(class="row")
-        a(class="col-lg-2 btn btn-link" href="#" role="button")="Create Plan"
-        a(class="col-lg-2 btn btn-link" href="#" role="button")="Update Plan"
-        //-a(class="col-lg-2 btn btn-link" href="#" role="button")="Delete Plan"
-      div(class="row")
-        a(class="col-lg-2 btn btn-link" href="#" role="button")="Create Task"
-        //-a(class="col-lg-2" href="#")="Update Task"
-        //-a(class="col-lg-2" href="#")="Delete Task"
-
+          button(class="col-2 btn btn-link" data-bs-toggle="modal" type="button" data-bs-target="#createAppModal")="Create Application"
+        //-button(class="col-2 btn btn-link" type="button" disabled)="Create Plan"
+      div(class="row g-3")
+        a(class="col-2 btn btn-link" href="/applications" )="Applications List"
+        a(class="col-2 btn btn-link" href="/plans" )="Plans List"
             
       if(canAdmin)
         hr
         div(class="row")
           h4="Admin controls"
         
-        div(class="row")
-          a(class="col-lg-2 btn btn-link" href="/admin/usercreate")="Create New User"
-          a(class="col-lg-2 btn btn-link" href="/admin/useredit")="Edit User Details"
+        div(class="row g-3")
+          a(class="col-2 btn btn-link" href="/admin/usercreate")="Create New User"
+          a(class="col-2 btn btn-link" href="/admin/useredit")="Edit User Details"
 
       hr
 
       div(class="row")
         h4="User settings"
 
-      div(class="row")
-        a(class="col-lg-2 btn btn-link" href="/user/passwordchange")="Change My Password"
-        a(class="col-lg-2 btn btn-link" href="/user/emailchange")="Change My Email"
+      div(class="row g-3")
+        a(class="col-2 btn btn-link" href="/user/passwordchange")="Change My Password"
+        a(class="col-2 btn btn-link" href="/user/emailchange")="Change My Email"

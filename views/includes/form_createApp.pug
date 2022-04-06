@@ -27,6 +27,11 @@ form(method="post" action="")
                 input#createAppPermitDoing(type="text" name="createAppPermitDoing" class="form-control" )
                 label(for="createAppPermitDone" class="form-label")="Grant 'Done' state permissions to these usergroups: (comma-delimited)"
                 input#createAppPermitDone(type="text" name="createAppPermitDone" class="form-control" )
+                hr
+                label(for="createAppPermitCreatePlan" class="form-label")="Grant 'Create Plan' permissions to these usergroups: (comma-delimited)"
+                input#createAppPermitCreatePlan(type="text" name="createAppPermitCreatePlan" class="form-control" )
+                label(for="createAppPermitCreateTask" class="form-label")="Grant 'Create Task' permissions to these usergroups: (comma-delimited)"
+                input#createAppPermitCreateTask(type="text" name="createAppPermitCreateTask" class="form-control" )
           div(class="modal-footer")
             button(type="reset" class="btn btn-danger" data-bs-dismiss="modal")="Close And Discard"
             button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"

@@ -4,11 +4,12 @@ html
     link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
   body
+    if appList
+      include includes/modal_confirmAppDelete.pug
     div(class="container")
-      h2(class="pb-2 border-bottom")="Task Management System - View/Edit Applications"
+      h2(class="pb-2 border-bottom")="Task Management System - Applications List"
         if isLoggedIn
-            small 
-              a(href="/logout")="Logout"
+          a(class="btn btn-link" href="/logout")="Logout"
 
       if error
         p(class="alert alert-danger")=error
@@ -19,45 +20,102 @@ html
       if success
         p(class="alert alert-success")=success
 
-      a(href="/tmsys")="Back to menu"
+      a(class="btn btn-link" href="/tmsys")="Back to menu"
       hr
 
       if isSearching
-        form(class="row g-3" method="get" action="")
+        form(class="row g-3 align-items-center" method="get" action="")
           div(class="col-auto")
             input(type="text" class="form-control" name="app_acronym" placeholder="Search applications...")
           div(class="col-auto")
-            button(type="submit" class="btn btn-primary mb-3")="Search"
+            button(type="submit" class="btn btn-primary")="Search"
           div(class="col-auto")="(By acronym; leave blank to search all)"
-        if appList
-          for app in appList 
-            form(method="post" action="")
-              //- TODO: bootstrap accordions that give info on click + buttons available based on usergroup
-            //-
-              td(style="border:1px solid black")
-                input(type="text", name="app_acronym", readonly, class="form-control-plaintext", value=app.App_Acronym) 
-              td(style="border:1px solid black")
-                textarea(row="6" name="app_description" readonly class="form-control-plaintext" value=app.App_Description)=app.App_Description
-              td(style="border:1px solid black")
-                input(type="date" name="app_startDate" readonly class="form-control-plaintext" value=app.App_startDate)
-              td(style="border:1px solid black")
-                input(type="date" name="app_endDate" readonly class="form-control-plaintext" value=app.App_endDate)
-              td(style="border:1px solid black")
-                input(type="text" name="app_permitOpen" readonly class="form-control-plaintext" value=app.App_permit_Open)
-              td(style="border:1px solid black")
-                input(type="text" name="app_permitToDo" readonly class="form-control-plaintext" value=app.App_permit_toDoList)
-              td(style="border:1px solid black")
-                input(type="text" name="app_permitDoing" readonly class="form-control-plaintext" value=app.App_permit_Doing)
-              td(style="border:1px solid black")
-                input(type="text" name="app_permitDone" readonly class="form-control-plaintext" value=app.App_permit_Done)
-              td(style="border:1px solid black") 
-                button(type="submit" class="btn btn-primary mb-3" name="btn_editThisApplication" value=true)="Edit"
-              td(style="border:1px solid black") 
-                button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deleteAppModal" data-bs-victim=app.App_Acronym name="btn_deleteThisApp" value=app.App_Acronym)="Delete"
-              include includes/modal_confirmAppDelete.pug
+        if appList 
+          div(class="accordion" id="accordionAppList")
+            for app in appList
+              - var idAccordionHeader = "accordionHeader" + app.App_Acronym;
+              - var idCollapseBody = "collapseBody" + app.App_Acronym;
+              - var targetForHeader = "#" + idCollapseBody;
+              - var idInputAcronym = "acronym" + app.App_Acronym;
+              - var idTextareaDescription = "description" + app.App_Acronym;
+              - var idInputDateStart = "dateStart" + app.App_Acronym;
+              - var idInputDateEnd = "dateEnd" + app.App_Acronym;
+              - var idInputPermitOpen = "permitOpen" + app.App_Acronym;
+              - var idInputPermitToDo = "permitToDo" + app.App_Acronym;
+              - var idInputPermitDoing = "permitDoing" + app.App_Acronym;
+              - var idInputPermitDone = "permitDone" + app.App_Acronym;
+              - var idInputPermitCreatePlan = "permitCreatePlan" + app.App_Acronym;
+              - var idInputPermitCreateTask = "permitCreateTask" + app.App_Acronym;
+              form(method="post" action="")
+                div(class="accordion-item")
+                  h2(class="accordion-header" id=idAccordionHeader)
+                    button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=targetForHeader aria-expanded="false" aria-controls=idCollapseBody)=app.App_Acronym
+                  div(id=idCollapseBody class="accordion-collapse collapse" aria-labelledby=idAccordionHeader data-bs-parent="accordionAppList")
+                    div(class="accordion-body container")
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputAcronym class="col-form-label")="Application Acronym:"
+                        div(class="col-10")
+                          input(id=idInputAcronym type="text" name="app_acronym" readonly class="form-control-plaintext" value=app.App_Acronym)
+                      div(class="row g-3 align-items-top")
+                        div(class="col-2")
+                          label(for=idTextareaDescription class="col-form-label")="Description:"
+                        div(class="col-10")
+                          textarea(id=idTextareaDescription row="6" name="app_description" readonly class="form-control-plaintext" value=app.App_Description)=app.App_Description
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputDateStart class="col-form-label")="Start Date:"
+                        div(class="col-10")
+                          input(id=idInputDateStart type="date" name="app_startDate" readonly class="form-control-plaintext" value=app.App_startDate)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputDateEnd class="col-form-label")="End Date:"
+                        div(class="col-10")
+                          input(id=idInputDateEnd type="date" name="app_endDate" readonly class="form-control-plaintext" value=app.App_endDate)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputPermitOpen class="col-form-label")="'Open' granted to:"
+                        div(class="col-10")
+                          input(id=idInputPermitOpen type="text" name="app_permitOpen" readonly class="form-control-plaintext" value=app.App_permit_Open)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputPermitToDo class="col-form-label")="'ToDo' granted to:"
+                        div(class="col-10")
+                          input(id=idInputPermitToDo type="text" name="app_permitToDo" readonly class="form-control-plaintext" value=app.App_permit_toDoList)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputPermitDoing class="col-form-label")="'Doing' granted to:"
+                        div(class="col-10")
+                          input(id=idInputPermitDoing type="text" name="app_permitDoing" readonly class="form-control-plaintext" value=app.App_permit_Doing)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputPermitDone class="col-form-label")="'Done' granted to:"
+                        div(class="col-10")
+                          input(id=idInputPermitDone type="text" name="app_permitDone" readonly class="form-control-plaintext" value=app.App_permit_Done)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputPermitCreatePlan class="col-form-label")="'Create Plan' granted to:"
+                        div(class="col-10")
+                          input(id=idInputPermitCreatePlan type="text" name="app_permitCreatePlan" readonly class="form-control-plaintext" value=app.App_permit_createPlan)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-2")
+                          label(for=idInputPermitCreateTask class="col-form-label")="'Create Task' granted to:"
+                        div(class="col-10")
+                          input(id=idInputPermitCreateTask type="text" name="app_permitCreateTask" readonly class="form-control-plaintext" value=app.App_permit_createTask)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-auto")
+                          button(type="submit" class="btn btn-primary mb-3" name="btn_editThisApplication" value=true)="Edit"
+                        div(class="col-auto")
+                          button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deleteAppModal" data-bs-victim=app.App_Acronym name="btn_deleteThisApp" value=app.App_Acronym)="Delete"
+                        if app.canCreatePlan === true
+                          div(class="col-auto")
+                            button(class="btn btn-primary mb-3" type="button" disabled)="Create Plan"
+                        if app.canCreateTask === true
+                          div(class="col-auto")
+                            button(class="btn btn-primary mb-3" type="button" disabled)="Create Task"
       if isEditingApplication
         div(class="row")
-          a(href="/applications")="Back to search"
+          a(class="col-auto btn btn-link" href="/applications")="Back to search"
         form(method="post" action="")
           div(class="mb-3")
             label(for="editeeAcronym" class="col-sm-2 col-form-label")="Editing Application:"
@@ -99,9 +157,19 @@ html
               input(type="text" name="App_permit_Done" class="d-none" value=App_permit_Done readonly)
               input#editeePermitDone(type="text" name="App_permit_Done_new" class="form-control" value=App_permit_Done)
           div(class="mb-3")
+            label(for="editeePermitCreatePlan" class="col-sm-2 col-form-label")="'Create Plan' Permissions:"
+            div(class="col-sm-5")
+              input(type="text" name="App_permit_createPlan" class="d-none" value=App_permit_createPlan readonly)
+              input#editeePermitCreatePlan(type="text" name="App_permit_createPlan_new" class="form-control" value=App_permit_createPlan)
+          div(class="mb-3")
+            label(for="editeePermitCreateTask" class="col-sm-2 col-form-label")="'Create Task' Permissions:"
+            div(class="col-sm-5")
+              input(type="text" name="App_permit_createTask" class="d-none" value=App_permit_createTask readonly)
+              input#editeePermitCreateTask(type="text" name="App_permit_createTask_new" class="form-control" value=App_permit_createTask)
+          div(class="mb-3")
             button(type="submit" class="btn btn-primary" name="btn_editApp" value=true)="Edit Application"
         div(class="row")
-          a(href="/applications")="Back to search"
+          a(class="col-auto btn btn-link" href="/applications")="Back to search"
 
   script.
     var confirmDeleteAppModal = document.getElementById('deleteAppModal');

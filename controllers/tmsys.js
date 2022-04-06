@@ -31,10 +31,10 @@ router.post('/',
             next();
         } else {
             let {createAppAcronym, createAppNumber, createAppDescription, createAppDateStart, createAppDateEnd} = req.body;
-            let {createAppPermitOpen, createAppPermitToDo, createAppPermitDoing, createAppPermitDone} = req.body;
+            let {createAppPermitOpen, createAppPermitToDo, createAppPermitDoing, createAppPermitDone, createAppPermitCreatePlan, createAppPermitCreateTask} = req.body;
 
             let myQuery = `INSERT INTO ${dbModel.getDbApplicationSchema()}(${dbModel.getDbColFormat_CreateApplication()})`;
-            myQuery += ` VALUES('${createAppAcronym}', '${createAppNumber}', '${createAppDescription}','${createAppDateStart}','${createAppDateEnd}','${createAppPermitOpen}','${createAppPermitToDo}','${createAppPermitDoing}','${createAppPermitDone}')`;
+            myQuery += ` VALUES('${createAppAcronym}', '${createAppNumber}', '${createAppDescription}','${createAppDateStart}','${createAppDateEnd}','${createAppPermitOpen}','${createAppPermitToDo}','${createAppPermitDoing}','${createAppPermitDone}','${createAppPermitCreatePlan}','${createAppPermitCreateTask}')`;
             let retQ = await dbModel.performQuery(myQuery);
             let error= retQ.error;
             let options = {

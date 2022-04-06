@@ -6,8 +6,7 @@ html
     div(class="container")
       h2(class="pb-2 border-bottom")="Task Management System - (Admin) Create User"
         if isLoggedIn
-            small 
-              a(href="/logout")="Logout"
+          a(class="btn btn-link" href="/logout")="Logout"
 
       if error 
         p(class="alert alert-danger")=error
@@ -28,4 +27,4 @@ html
       
       div(class="row")
         div(class="col")
-          a(href="/tmsys")="Back to menu"
+          a(class="btn btn-link" href="/tmsys")="Back to menu"

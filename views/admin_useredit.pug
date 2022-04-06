@@ -6,8 +6,7 @@ html
     div(class="container")
       h2(class="pb-2 border-bottom")="Task Management System - (Admin) Edit User"
         if isLoggedIn
-            small
-              a(href="/logout")="Logout"
+          a(class="btn btn-link" href="/logout")="Logout"
 
       if error
         p(class="alert alert-danger")=error
@@ -17,7 +16,7 @@ html
 
       div(class="row")
         div(class="col")
-          a(href="/tmsys")="Back to menu"
+          a(class="btn btn-link" href="/tmsys")="Back to menu"
       hr
       if canAdmin
         if isSearching
@@ -80,7 +79,7 @@ html
                 button(type="submit" class="btn btn-primary" name="btn_updateUser" value=true)="Update User"
           div(class="row")
             div(class="col")
-              a(href="/admin/useredit")="Back to search"
+              a(class="btn btn-link" href="/admin/useredit")="Back to search"
         if isChangingUsergroup
           form(action="" method="post")
             div(class="row mb-3")
@@ -100,4 +99,4 @@ html
                   button(type="submit" class="btn btn-primary" name="btn_changeUsergroup" value=true)="Change Usergroup"
           div(class="row")
             div(class="col")
-              a(href="/admin/useredit")="Back to search"
+              a(class="btn btn-link" href="/admin/useredit")="Back to search"
