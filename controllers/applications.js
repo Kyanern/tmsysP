@@ -78,7 +78,7 @@ let renderAppList = async (req, res, finalError, finalSuccess) => {
       rows[i].canCreatePlan = usergroupRX.test(rows[i].App_permit_createPlan);
       rows[i].canCreateTask = usergroupRX.test(rows[i].App_permit_createTask);
   }
-  console.dir(rows);
+  // console.dir(rows);
 
   res.render('app_list', {
       isLoggedIn: req.session.isLoggedIn,
@@ -265,7 +265,7 @@ router.post('/',
     if(!btn_deleteApp){
       next();
     } else {
-      console.log('Attempting to delete application: ' + btn_deleteApp);
+      // console.log('Attempting to delete application: ' + btn_deleteApp);
       //note that we aren't doing some safety checks.
       let myQuery = `DELETE FROM ${dbModel.getDbApplicationSchema()} WHERE ${dbModel.getDbApplicationSchemaColAcronym()} = '${btn_deleteApp}';`;
       let retQ = await dbModel.performQuery(myQuery);

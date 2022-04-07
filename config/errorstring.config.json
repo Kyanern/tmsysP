@@ -9,5 +9,7 @@
     "passwordOldWrong": "Old Password is incorrect.",
     "internalErrorWebsite": "An Internal Error occurred. (Website)",
     "nothingToModify": "There is nothing to modify.",
-    "deleteAppFailed": "Delete Application operation failed. Please ensure selected application does not have any plans and/or tasks referring to it."
+    "deleteAppFailed": "Delete Application operation failed. Please ensure selected application does not have any plans and/or tasks referring to it.",
+    "createPlanNoPermits": "You are not permitted to create plans for any existing application.",
+    "createPlanNameTaken": "A plan with this name already exists: "
 }

@@ -94,7 +94,7 @@ html
       div(class="row g-3")
         if canAdmin
           button(class="col-2 btn btn-link" data-bs-toggle="modal" type="button" data-bs-target="#createAppModal")="Create Application"
-        //-button(class="col-2 btn btn-link" type="button" disabled)="Create Plan"
+        a(class="col-2 btn btn-link" href="/plans/create")="Create Plan"
       div(class="row g-3")
         a(class="col-2 btn btn-link" href="/applications" )="Applications List"
         a(class="col-2 btn btn-link" href="/plans" )="Plans List"
