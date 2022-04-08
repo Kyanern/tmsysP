@@ -16,7 +16,6 @@ let renderAppList = async (req, res, finalError, finalSuccess) => {
     //console.log('\n***\n' + error + '\n***\n');
     res.render('app_list', {
       isLoggedIn: req.session.isLoggedIn, 
-      canUpdateApp: req.body.isProjectLead,
       error:errorStr.internalErrorDB,
       errorSpecial: finalError
     });
@@ -53,7 +52,6 @@ let renderAppList = async (req, res, finalError, finalSuccess) => {
     //console.log('\n***\n' + error + '\n***\n');
     res.render('app_list', {
         isLoggedIn: req.session.isLoggedIn, 
-        canUpdateApp: req.body.isProjectLead,
         error:errorStr.internalErrorDB,
         errorSpecial: finalError
     });
@@ -82,7 +80,6 @@ let renderAppList = async (req, res, finalError, finalSuccess) => {
 
   res.render('app_list', {
       isLoggedIn: req.session.isLoggedIn,
-      canUpdateApp: req.body.isProjectLead,
       isSearching: true,
       appList: rows,
       error: finalError,
@@ -119,7 +116,6 @@ router.post('/',
       let {app_permitOpen,app_permitToDo,app_permitDoing,app_permitDone, app_permitCreatePlan, app_permitCreateTask} = req.body;
       let options = {
         isLoggedIn : req.session.isLoggedIn,
-        canUpdateApp: req.body.isProjectLead,
         isEditingApplication: true,
         App_Acronym: app_acronym,
         App_Description: app_description,
@@ -208,6 +204,26 @@ router.post('/',
         //console.log("pushed new permit_createTask into stack");
       }
 
+      if(!myStack.length){
+        let options = {
+          isLoggedIn : req.session.isLoggedIn,
+          isEditingApplication: true,
+          App_Acronym: App_Acronym,
+          App_Description: App_Description,
+          App_startDate: App_startDate,
+          App_endDate: App_endDate,
+          App_permit_Open: App_permit_Open,
+          App_permit_toDoList: App_permit_toDoList,
+          App_permit_Doing: App_permit_Doing,
+          App_permit_Done: App_permit_Done,
+          App_permit_createPlan: App_permit_createPlan,
+          App_permit_createTask: App_permit_createTask,
+          error: errorStr.nothingToModify
+        }
+        res.render('app_list',options);
+        return;
+      }
+
       while(myStack.length){  //might be dangerous...?
         myQuery += myStack.pop();
         if(myStack.length) myQuery += ',';
@@ -223,7 +239,6 @@ router.post('/',
       if(retQ.error){
         let options = {
           isLoggedIn : req.session.isLoggedIn,
-          canUpdateApp: req.body.isProjectLead,
           isEditingApplication: true,
           App_Acronym: App_Acronym,
           App_Description: App_Description,
@@ -242,7 +257,6 @@ router.post('/',
       } //else
       let options = {
         isLoggedIn : req.session.isLoggedIn,
-        canUpdateApp: req.body.isProjectLead,
         isEditingApplication: true,
         App_Acronym: App_Acronym,
         App_Description: disp_Description,

@@ -11,5 +11,6 @@
     "nothingToModify": "There is nothing to modify.",
     "deleteAppFailed": "Delete Application operation failed. Please ensure selected application does not have any plans and/or tasks referring to it.",
     "createPlanNoPermits": "You are not permitted to create plans for any existing application.",
-    "createPlanNameTaken": "A plan with this name already exists: "
+    "createPlanNameTaken": "A plan with this name already exists: ",
+    "listPlanNoPlans": "No plans found. If you are expecting to see a plan in this list, you may not have permissions for the application it is attached to."
 }

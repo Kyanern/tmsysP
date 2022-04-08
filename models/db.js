@@ -146,6 +146,9 @@ module.exports = {
     getDbColFormat_ListApplications: () => {
         return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}, ${dbConfigs.dbApplicationSchemaColPermitCreatePlan}, ${dbConfigs.dbApplicationSchemaColPermitCreateTask}`;
     },
+    getDbColFormat_ListPlans: () => {
+        return `${dbConfigs.dbPlanSchemaColMVPName}, ${dbConfigs.dbPlanSchemaColDateStart}, ${dbConfigs.dbPlanSchemaColDateEnd}, ${dbConfigs.dbPlanSchemaColAcronym}`;
+    },
     
 
     establishDbConnection: () => {

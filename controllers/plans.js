@@ -6,7 +6,6 @@ const errorStr = require('../config/errorstring.config.json');
 const helperModel = require('../models/helperfuncs');
 
 let renderPlanList = async (req, res, finalError, finalSuccess) => {
-  let {plan_mvp_name} = req.query;
   //first query what groups this user belongs to.
   let grpQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${req.session.username}'`;
   let retgrp = await dbModel.performQuery(grpQuery);
@@ -14,6 +13,7 @@ let renderPlanList = async (req, res, finalError, finalSuccess) => {
     //console.log('\n***\n' + error + '\n***\n');
     res.render('plan_list', {
       isLoggedIn: req.session.isLoggedIn,
+      isSearching: true,
       error:errorStr.internalErrorDB,
       errorSpecial: finalError
     });
@@ -33,16 +33,49 @@ let renderPlanList = async (req, res, finalError, finalSuccess) => {
   let qCond5 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreatePlan()}, '${usergroup}') `;
   let qCond6 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreateTask()}, '${usergroup}') `;
   //construct query
-  //if no search term display all
   let appQuery = qSELECTFROM + qWHERE + '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + qOR + qCond5 + qOR + qCond6 + ')';
-  //console.log(myQuery);
+  //console.log(appQuery);
   let retapp = await dbModel.performQuery(appQuery);
   if(retapp.error){
-    console.dir(retapp.error);
-    res.render('plan_list', {isLoggedIn: req.session.isLoggedIn, error:errorStr.internalErrorDB, errorSpecial: finalError});
+    // console.dir(retapp.error);
+    res.render('plan_list', {isLoggedIn: req.session.isLoggedIn, isSearching: true, error:errorStr.internalErrorDB, errorSpecial: finalError});
     return;
   }
-  //TODO: complete plan_list
+  if(retapp.result.length === 0){
+    res.render('plan_list', {isLoggedIn: req.session.isLoggedIn, isSearching: true, error: errorStr.listPlanNoPlans, errorSpecial: finalError});
+    return;
+  }
+  let acronyms = helperModel.regexfy_appAcronyms(retapp.result);
+  //now we have applications that this user can view, we get the plans attached to those applications.
+  let planQuery = `SELECT ${dbModel.getDbColFormat_ListPlans()} FROM ${dbModel.getDbPlanSchema()} WHERE REGEXP_LIKE(${dbModel.getDbPlanSchemaColAcronym()}, '${acronyms}') `;
+  let {plan_mvp_name} = req.query;
+  if(plan_mvp_name){
+    planQuery += `AND ${dbModel.getDbPlanSchemaColMVPName()} LIKE '%${plan_mvp_name}%' `;
+  }
+  let retplan = await dbModel.performQuery(planQuery);
+  if(retplan.result.length === 0){
+    res.render('plan_list', {isLoggedIn: req.session.isLoggedIn, isSearching: true, error: errorStr.listPlanNoPlans, errorSpecial: finalError});
+    return;
+  }
+  for(let i = 0; i < retplan.result.length; i++){
+    // we have to translate between mysql and html date formats. in my particular case
+    // mysql returns me dates in the ISO format (e.g. 2022-03-31T16:00:00.000Z)
+    // as a Date object
+    // but i have to pass html the date without the T-part.
+    // there are a few ways to extract the date...
+    // 2022 04 01 : toString then split. this might break if mysql changes formats.
+    let temp = (retplan.result[i].Plan_startDate.toISOString().split('T'))[0];
+    retplan.result[i].Plan_startDate = temp;
+    temp = (retplan.result[i].Plan_endDate.toISOString().split('T'))[0];
+    retplan.result[i].Plan_endDate = temp;
+}
+  res.render('plan_list', {
+    isLoggedIn: req.session.isLoggedIn,
+    isSearching: true,
+    planList: retplan.result,
+    error: finalError,
+    success: finalSuccess
+  });
 }
 
 let renderCreateForm = async (req, res, finalError, finalSuccess) => {
@@ -50,7 +83,7 @@ let renderCreateForm = async (req, res, finalError, finalSuccess) => {
     let grpQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${req.session.username}'`;
     let retgrp = await dbModel.performQuery(grpQuery);
     if(retgrp.error || (retgrp.result.length !== 1)){
-      console.dir(retgrp.error);
+      // console.dir(retgrp.error);
       res.render('plan_create', {isLoggedIn: req.session.isLoggedIn, error:errorStr.internalErrorDB, disallowed: true, success: finalSuccess});
       return;
     }
@@ -60,7 +93,7 @@ let renderCreateForm = async (req, res, finalError, finalSuccess) => {
     let appQuery = `SELECT ${dbModel.getDbApplicationSchemaColAcronym()} FROM ${dbModel.getDbApplicationSchema()} WHERE REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreatePlan()},'${usergroup}')`;
     let retapp = await dbModel.performQuery(appQuery);
     if(retapp.error){
-      console.dir(retapp.error);
+      // console.dir(retapp.error);
       res.render('plan_create', {isLoggedIn: req.session.isLoggedIn, error:errorStr.internalErrorDB, disallowed: true, success: finalSuccess});
       return;
     }
@@ -90,9 +123,119 @@ router.use(async (req, res, next) => {
 });
 
 //GET request for Plans List
-router.get('/', async (req,res,next)=>{
-
+router.get('/', async (req,res)=>{
+  renderPlanList(req,res);
 });
+
+//POST request for Plans List
+router.post('/', 
+  //handles POST request from a btn_editThisPlan button
+  async (req,res,next)=>{
+    let {btn_editThisPlan} = req.body;
+    if(!btn_editThisPlan){
+      next();
+    } else{
+      let {Plan_MVP_name, Plan_app_Acronym, Plan_startDate, Plan_endDate} = req.body;
+      let options = {
+        isLoggedIn : req.session.isLoggedIn,
+        isEditingPlan: true,
+        Plan_MVP_name: Plan_MVP_name,
+        Plan_app_Acronym: Plan_app_Acronym,
+        Plan_startDate: Plan_startDate,
+        Plan_endDate: Plan_endDate
+      }
+      res.render('plan_list',options);
+    }
+  },
+  //handles POST request from a btn_editPlan button
+  async (req,res,next)=>{
+    let{btn_editPlan} = req.body;
+    if(!btn_editPlan){
+      next();
+    } else{
+      let {Plan_MVP_name, Plan_app_Acronym, Plan_startDate, Plan_endDate} = req.body;
+      let {Plan_startDate_new, Plan_endDate_new} = req.body;
+      let disp_startDate = Plan_startDate;
+      let disp_endDate = Plan_endDate;
+      let myQuery = `UPDATE ${dbModel.getDbPlanSchema()} SET `;
+      let myStack = [];
+      if(Plan_startDate !== Plan_startDate_new){
+        myStack.push(`${dbModel.getDbPlanSchemaColDateStart()}='${Plan_startDate_new}'`);
+        disp_startDate = Plan_startDate_new;
+        //console.log("pushed new start date into stack");
+      }
+      if(Plan_endDate !== Plan_endDate_new){
+        myStack.push(`${dbModel.getDbPlanSchemaColDateEnd()}='${Plan_endDate_new}'`);
+        disp_endDate = Plan_endDate_new;
+        //console.log("pushed new end date into stack");
+      }
+      if(!myStack.length){
+        let options = {
+          isLoggedIn : req.session.isLoggedIn,
+          isEditingPlan: true,
+          Plan_MVP_name: Plan_MVP_name,
+          Plan_app_Acronym: Plan_app_Acronym,
+          Plan_startDate: Plan_startDate,
+          Plan_endDate: Plan_endDate,
+          error: errorStr.nothingToModify
+        }
+        res.render('plan_list',options);
+        return;
+      }
+      while(myStack.length){  //might be dangerous...?
+        myQuery += myStack.pop();
+        if(myStack.length) myQuery += ',';
+      }
+      myQuery += ` WHERE ${dbModel.getDbPlanSchemaColMVPName()}='${Plan_MVP_name}';`;
+      let retQ = await dbModel.performQuery(myQuery);
+      if(retQ.error){
+        let options = {
+          isLoggedIn : req.session.isLoggedIn,
+          isEditingPlan: true,
+          Plan_MVP_name: Plan_MVP_name,
+          Plan_app_Acronym: Plan_app_Acronym,
+          Plan_startDate: Plan_startDate,
+          Plan_endDate: Plan_endDate,
+          error: errorStr.nothingToModify
+        }
+        res.render('plan_list',options);
+        return;
+      }
+      let options = {
+        isLoggedIn : req.session.isLoggedIn,
+        isEditingPlan: true,
+        Plan_MVP_name: Plan_MVP_name,
+        Plan_app_Acronym: Plan_app_Acronym,
+        Plan_startDate: disp_startDate,
+        Plan_endDate: disp_endDate,
+        success: `'${Plan_MVP_name}'@${Plan_app_Acronym} successfully updated.`
+      }
+      res.render('plan_list',options);
+    }
+  },
+  //handles POST request from a btn_deletePlan button
+  async (req,res,next)=>{
+    let {btn_deletePlan} = req.body;
+    if(!btn_deletePlan){
+      next();
+    } else {
+      //note that we aren't doing some safety checks.
+      let myQuery = `DELETE FROM ${dbModel.getDbPlanSchema()} WHERE ${dbModel.getDbPlanSchemaColMVPName()} = '${btn_deletePlan}';`;
+      let retQ = await dbModel.performQuery(myQuery);
+      let {error, result} = retQ;
+      if(error){
+        // console.dir(error);
+        if(error.errno === 1451){
+          renderPlanList(req, res, errorStr.deletePlanFailed, null);
+        } else {
+          renderPlanList(req, res, errorStr.internalErrorDB, null);
+        }
+        return;
+      }
+      renderPlanList(req, res, null, `Plan '${btn_deletePlan}' deleted.`);
+    }
+  }
+);
 
 //GET request for Create Plan
 router.get('/create', async(req,res)=>{
@@ -105,7 +248,7 @@ router.post('/create', async(req,res)=>{
   let myQuery = `INSERT INTO ${dbModel.getDbPlanSchema()}(${dbModel.getDbPlanSchemaColMVPName()},${dbModel.getDbPlanSchemaColDateStart()},${dbModel.getDbPlanSchemaColDateEnd()},${dbModel.getDbPlanSchemaColAcronym()}) VALUES('${Plan_MVP_name}','${Plan_startDate}','${Plan_endDate}','${Plan_app_Acronym}')`;
   let retQ = await dbModel.performQuery(myQuery);
   if(retQ.error){
-    console.dir(retQ.error);
+    // console.dir(retQ.error);
     if(retQ.error.errno === 1062){
       //res.render('plan_create', {isLoggedIn: req.session.isLoggedIn, error: (errorStr.createPlanNameTaken + Plan_MVP_name)});
       renderCreateForm(req,res,(errorStr.createPlanNameTaken + Plan_MVP_name),null);

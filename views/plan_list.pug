@@ -4,8 +4,6 @@ html
     link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
   body
-    //-if appList
-      include includes/modal_confirmAppDelete.pug
     div(class="container")
       h2(class="pb-2 border-bottom")="Task Management System - Plans List"
         if isLoggedIn
@@ -33,24 +31,25 @@ html
         if planList 
           div(class="accordion" id="accordionAppList")
             for plan in planList
-              - var idAccordionHeader = "accordionHeader" + plan.Plan_MVP_Name;
-              - var idCollapseBody = "collapseBody" + plan.Plan_MVP_Name;
+              //- - console.dir(plan);
+              - var idAccordionHeader = "accordionHeader" + plan.Plan_MVP_name;
+              - var idCollapseBody = "collapseBody" + plan.Plan_MVP_name;
               - var targetForHeader = "#" + idCollapseBody;
-              - var idInputMVPName = "mvpname" + plan.Plan_MVP_Name;
-              - var idInputAppAcronym = "appacronym" + plan.Plan_MVP_Name;
-              - var idInputDateStart = "dateStart" + plan.Plan_MVP_Name;
-              - var idInputDateEnd = "dateEnd" + plan.Plan_MVP_Name;
+              - var idInputMVPName = "mvpname" + plan.Plan_MVP_name;
+              - var idInputAppAcronym = "appacronym" + plan.Plan_MVP_name;
+              - var idInputDateStart = "dateStart" + plan.Plan_MVP_name;
+              - var idInputDateEnd = "dateEnd" + plan.Plan_MVP_name;
               form(method="post" action="")
                 div(class="accordion-item")
                   h2(class="accordion-header" id=idAccordionHeader)
-                    button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=targetForHeader aria-expanded="false" aria-controls=idCollapseBody)=plan.Plan_MVP_Name+"@"+plan.Plan_app_Acronym
+                    button(class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target=targetForHeader aria-expanded="false" aria-controls=idCollapseBody)=plan.Plan_MVP_name+"@"+plan.Plan_app_Acronym
                   div(id=idCollapseBody class="accordion-collapse collapse" aria-labelledby=idAccordionHeader data-bs-parent="accordionAppList")
                     div(class="accordion-body container")
                       div(class="row g-3 align-items-center")
                         div(class="col-2")
                           label(for=idInputMVPName class="col-form-label")="Plan MVP Name:"
                         div(class="col-10")
-                          input(id=idInputMVPName type="text" name="Plan_MVP_Name" readonly class="form-control-plaintext" value=plan.Plan_MVP_Name)
+                          input(id=idInputMVPName type="text" name="Plan_MVP_name" readonly class="form-control-plaintext" value=plan.Plan_MVP_name)
                       div(class="row g-3 align-items-center")
                         div(class="col-2")
                           label(for=idInputAppAcronym class="col-form-label")="Attached to Application:"
@@ -66,3 +65,51 @@ html
                           label(for=idInputDateEnd class="col-form-label")="End Date:"
                         div(class="col-10")
                           input(id=idInputDateEnd type="date" name="Plan_endDate" readonly class="form-control-plaintext" value=plan.Plan_endDate)
+                      div(class="row g-3 align-items-center")
+                        div(class="col-auto")
+                          button(type="submit" class="btn btn-primary mb-3" name="btn_editThisPlan" value=true)="Edit"
+                        div(class="col-auto")
+                          button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deletePlanModal" data-bs-victim=app.App_Acronym name="btn_deleteThisPlan" value=plan.Plan_MVP_name)="Delete"
+                include includes/modal_confirmPlanDelete.pug
+      if isEditingPlan
+        div(class="row")
+          a(class="col-auto btn btn-link" href="/plans")="Back to search"
+        form(method="post" action="")
+          div(class="mb-3")
+            label(for="editeeMVPName" class="col-sm-2 col-form-label")="Editing Plan:"
+            div(class="col-sm-3")
+              input#editeeMVPName(type="text", name="Plan_MVP_name", readonly, class="form-control-plaintext", value=Plan_MVP_name)
+          div(class="mb-3")
+            label(for="editeeAcronym" class="col-sm-2 col-form-label")="Attached to Application:"
+            div(class="col-sm-3")
+              input#editeeAcronym(type="text", name="Plan_app_Acronym", readonly, class="form-control-plaintext", value=Plan_app_Acronym)
+          div(class="mb-3")
+            label(for="editeeDateStart" class="col-sm-2 col-form-label")="Start Date:"
+            div(class="col-sm-2")
+              input(type="date" name="Plan_startDate" class="d-none" value=Plan_startDate readonly)
+              input#editeeDateStart(type="date" name="Plan_startDate_new" class="form-control" value=Plan_startDate)
+          div(class="mb-3")
+            label(for="editeeDateEnd" class="col-sm-2 col-form-label")="End Date:"
+            div(class="col-sm-2")
+              input(type="date" name="Plan_endDate" class="d-none" value=Plan_endDate readonly)
+              input#editeeDateEnd(type="date" name="Plan_endDate_new" class="form-control" value=Plan_endDate)
+          div(class="mb-3")
+            button(type="submit" class="btn btn-primary" name="btn_editPlan" value=true)="Edit Plan"
+        div(class="row")
+          a(class="col-auto btn btn-link" href="/plans")="Back to search"
+
+  script.
+    var confirmDeleteAppModal = document.getElementById('deletePlanModal');
+    confirmDeleteAppModal.addEventListener('show.bs.modal', function (event){
+      //button that triggered modal
+      var button = event.relatedTarget;
+      //extract info from data-bs-* attribute
+      var info = button.getAttribute('data-bs-victim');
+      //update modal content
+      var modalTitle = document.getElementById('deletePlanModalLabel');
+      var modalBodyP = document.getElementById('deletePlanMVPNameText');
+      var btn_deleteApp = document.getElementById('btn_deletePlan');
+      modalTitle.textContent = 'Delete Plan ' + info;
+      modalBodyP.textContent = info;
+      btn_deleteApp.value = info;
+    });
