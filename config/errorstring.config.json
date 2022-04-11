@@ -12,5 +12,9 @@
     "deleteAppFailed": "Delete Application operation failed. Please ensure selected application does not have any plans and/or tasks referring to it.",
     "createPlanNoPermits": "You are not permitted to create plans for any existing application.",
     "createPlanNameTaken": "A plan with this name already exists: ",
-    "listPlanNoPlans": "No plans found. If you are expecting to see a plan in this list, you may not have permissions for the application it is attached to."
+    "listPlanNoPlans": "No plans found. If you are expecting to see a plan in this list, you may not have permissions for the application it is attached to.",
+    "userNoUsergroups": "You do not belong in any usergroups. Please contact administration.",
+    "createTaskNoPermits": "You are not permitted to create tasks for any existing application.",
+    "createTaskIDTaken": "Please contact administration. A task with the following ID already exists: ",
+    "createTaskRNumCannotIncrement": "Please contact administration. There was an error when trying to increment RNumber of application: "
 }

@@ -149,6 +149,10 @@ module.exports = {
     getDbColFormat_ListPlans: () => {
         return `${dbConfigs.dbPlanSchemaColMVPName}, ${dbConfigs.dbPlanSchemaColDateStart}, ${dbConfigs.dbPlanSchemaColDateEnd}, ${dbConfigs.dbPlanSchemaColAcronym}`;
     },
+    getDbColFormat_CreateTask: () => {
+        //TODO: Task_plan for when it's available.
+        return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColAcronym}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}`;
+    },
     
 
     establishDbConnection: () => {
@@ -177,5 +181,9 @@ module.exports = {
             console.log('\n***\n'+e+'\n***\n');
             return ({error: e});
         }
+    },
+
+    giveEscaped: (string) => {
+        return mysql.escape(string);
     }
 }

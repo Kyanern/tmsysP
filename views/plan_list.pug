@@ -19,6 +19,7 @@ html
         p(class="alert alert-success")=success
 
       a(class="btn btn-link" href="/tmsys")="Back to menu"
+      a(class="btn btn-link" href="/applications")="Applications List"
       hr
 
       if isSearching
@@ -69,7 +70,7 @@ html
                         div(class="col-auto")
                           button(type="submit" class="btn btn-primary mb-3" name="btn_editThisPlan" value=true)="Edit"
                         div(class="col-auto")
-                          button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deletePlanModal" data-bs-victim=app.App_Acronym name="btn_deleteThisPlan" value=plan.Plan_MVP_name)="Delete"
+                          button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deletePlanModal" data-bs-victim=plan.Plan_MVP_name name="btn_deleteThisPlan" value=plan.Plan_MVP_name)="Delete"
                 include includes/modal_confirmPlanDelete.pug
       if isEditingPlan
         div(class="row")
@@ -97,6 +98,9 @@ html
             button(type="submit" class="btn btn-primary" name="btn_editPlan" value=true)="Edit Plan"
         div(class="row")
           a(class="col-auto btn btn-link" href="/plans")="Back to search"
+      hr
+      a(class="btn btn-link" href="/tmsys")="Back to menu"
+      a(class="btn btn-link" href="/applications")="Applications List"
 
   script.
     var confirmDeleteAppModal = document.getElementById('deletePlanModal');

@@ -9,12 +9,22 @@ let renderPlanList = async (req, res, finalError, finalSuccess) => {
   //first query what groups this user belongs to.
   let grpQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${req.session.username}'`;
   let retgrp = await dbModel.performQuery(grpQuery);
-  if(retgrp.error || !retgrp.result.length){
+  if(retgrp.error){
     //console.log('\n***\n' + error + '\n***\n');
     res.render('plan_list', {
       isLoggedIn: req.session.isLoggedIn,
       isSearching: true,
       error:errorStr.internalErrorDB,
+      errorSpecial: finalError
+    });
+    return;
+  }
+  if(!retgrp.result.length){
+    //console.log('\n***\n' + error + '\n***\n');
+    res.render('plan_list', {
+      isLoggedIn: req.session.isLoggedIn,
+      isSearching: true,
+      error:errorStr.userNoUsergroups,
       errorSpecial: finalError
     });
     return;

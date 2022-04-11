@@ -19,6 +19,7 @@ html
         p(class="alert alert-success")=success
 
       a(class="btn btn-link" href="/tmsys")="Back to menu"
+      a(class="btn btn-link" href="/plans")="Plans List"
       hr
 
       if isSearching
@@ -169,6 +170,9 @@ html
             button(type="submit" class="btn btn-primary" name="btn_editApp" value=true)="Edit Application"
         div(class="row")
           a(class="col-auto btn btn-link" href="/applications")="Back to search"
+      hr
+      a(class="btn btn-link" href="/tmsys")="Back to menu"
+      a(class="btn btn-link" href="/plans")="Plans List"
 
   script.
     var confirmDeleteAppModal = document.getElementById('deleteAppModal');

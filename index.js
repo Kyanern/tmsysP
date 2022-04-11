@@ -12,6 +12,7 @@ const adminController = require('./controllers/admin');
 const logoutController = require('./controllers/logout');
 const applicationsController = require('./controllers/applications');
 const plansController = require('./controllers/plans');
+const tasksController = require('./controllers/tasks');
 
 // Inititalize the app and add middleware
 app.set('view engine', 'pug'); // Setup the pug
@@ -28,6 +29,7 @@ app.use('/admin', adminController);
 app.use('/logout',logoutController);
 app.use('/applications', applicationsController);
 app.use('/plans', plansController);
+app.use('/tasks', tasksController);
 
 app.get('/', (req, res) => {
   if(req.session.isLoggedIn){

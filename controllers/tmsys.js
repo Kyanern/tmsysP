@@ -51,10 +51,6 @@ router.post('/',
             options.success = `Application ${createAppAcronym} successfully created`;
             res.render('tmsys', options);
         }
-    },
-    //handles create plan form button
-    async (req,res,next)=>{
-
     }
 )
 
