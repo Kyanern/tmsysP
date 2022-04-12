@@ -16,5 +16,7 @@
     "userNoUsergroups": "You do not belong in any usergroups. Please contact administration.",
     "createTaskNoPermits": "You are not permitted to create tasks for any existing application.",
     "createTaskIDTaken": "Please contact administration. A task with the following ID already exists: ",
-    "createTaskRNumCannotIncrement": "Please contact administration. There was an error when trying to increment RNumber of application: "
+    "createTaskRNumCannotIncrement": "Please contact administration. There was an error when trying to increment RNumber of application: ",
+    "listTasksNoApps": "No tasks to display. If you are expecting tasks to show up, you may not have permissions for the applications they are associated with.",
+    "userNotLoggedIn": "User not logged in."
 }

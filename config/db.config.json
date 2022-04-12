@@ -39,5 +39,10 @@
     "dbTaskSchemaColState": "Task_state",
     "dbTaskSchemaColCreator": "Task_creator",
     "dbTaskSchemaColOwner": "Task_owner",
-    "dbTaskSchemaColDateCreate": "Task_createDate"
+    "dbTaskSchemaColDateCreate": "Task_createDate",
+    "dbTaskSchemaColStateEnumOpen": "open",
+    "dbTaskSchemaColStateEnumToDo": "todo",
+    "dbTaskSchemaColStateEnumDoing": "doing",
+    "dbTaskSchemaColStateEnumDone": "done",
+    "dbTaskSchemaColStateEnumClosed": "closed"
 }

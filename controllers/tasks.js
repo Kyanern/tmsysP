@@ -80,6 +80,24 @@ router.use(async (req, res, next) => {
 
 //GET request for create plan
 router.get('/create',
+  //AJAX GET request to populate plan list when an appplication is selected
+  async (req,res,next)=>{
+    let {requestFrom} = req.query;
+    if(requestFrom !== "createTaskSelApp"){
+      next();
+    } else {
+      let {value} = req.query;
+      let planQuery = `SELECT ${dbModel.getDbPlanSchemaColMVPName()} AS "name" FROM ${dbModel.getDbPlanSchema()} WHERE ${dbModel.getDbPlanSchemaColAcronym()} = '${value}'`;
+      let retplan = await dbModel.performQuery(planQuery);
+      if(retplan.error){
+        //console.dir(error);
+        res.send({error: errorStr.internalErrorDB});
+        return;
+      }
+      res.send(retplan.result);
+    }
+  },
+  //normal GET request
   async (req,res)=>{
     renderCreateForm(req,res,null,null);
   }
@@ -107,7 +125,8 @@ router.post('/create',
     ** (5) - To be handled by server. <req.session.username>
     */
 
-    let {Task_app_Acronym, Task_name, Task_description} = req.body;
+    let {Task_app_Acronym, Task_plan, Task_name, Task_description} = req.body;
+    console.log('Task_plan = ' + Task_plan);
     //first query the running number
     let rnumQuery = `SELECT ${dbModel.getDbApplicationSchemaColRnumber()} FROM ${dbModel.getDbApplicationSchema()} WHERE ${dbModel.getDbApplicationSchemaColAcronym()} = '${Task_app_Acronym}'`;
     let retrnum = await dbModel.performQuery(rnumQuery);
@@ -130,7 +149,16 @@ router.post('/create',
     Task_name = dbModel.giveEscaped(Task_name);
     Task_description = dbModel.giveEscaped(Task_description);
 
-    let insQuery = `INSERT INTO ${dbModel.getDbTaskSchema()}(${dbModel.getDbColFormat_CreateTask()}) VALUES(${Task_name},${Task_description},'${Task_id}','${Task_app_Acronym}','${Task_creator}','${Task_owner}')`;
+    //query substrings
+    let qINSERT = `INSERT INTO ${dbModel.getDbTaskSchema()} `;
+    //We separate out column Task_plan because it is an optional entry.
+    //if Task_plan value exists from user-submitted form then we add the column in.
+    let qColFormat = (Task_plan ? `(${dbModel.getDbColFormat_CreateTask()},${dbModel.getDbTaskSchemaColPlan()}) ` : `(${dbModel.getDbColFormat_CreateTask()}) `);
+    let qVALUES = `VALUES `;
+    //if Task_plan value exists from user-submitted form then we add the value in.
+    let qArguments = (Task_plan ? `(${Task_name},${Task_description},'${Task_id}','${Task_app_Acronym}','${Task_creator}','${Task_owner}', '${Task_plan}')` : `(${Task_name},${Task_description},'${Task_id}','${Task_app_Acronym}','${Task_creator}','${Task_owner}')`);
+    let insQuery = qINSERT + qColFormat + qVALUES + qArguments;
+    console.log('insQuery = '+insQuery);
     let retins = await dbModel.performQuery(insQuery);
     if(retins.error){
       //console.dir(retins.error);

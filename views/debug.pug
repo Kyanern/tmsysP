@@ -8,9 +8,17 @@ html(style="height: -webkit-fill-available")
     script.
       var $jq = jQuery.noConflict();
       var btn_selectQuery;
+      var btn_emptyOutPlan;
       $jq( document ).ready(function() {
         console.log( "document loaded" );
         btn_selectQuery = $jq("#btn_AJAXPerformSelectQuery");
+        btn_emptyOutPlan = $jq("#btn_JQEmptyOutPlanSelections");
+        if(btn_emptyOutPlan.length){
+          console.log("successfully attached #btn_JQEmptyOutPlanSelections to var btn_emptyOutPlan");
+          btn_emptyOutPlan.click(function(){
+            $jq("#select-plan").empty();
+          });
+        }
         if(btn_selectQuery.length){
           console.log("successfully attached #btn_AJAXPerformSelectQuery to var btn_selectQuery");
           console.log(btn_selectQuery.html());
@@ -51,6 +59,7 @@ html(style="height: -webkit-fill-available")
     h2(class="font-weight-light")="Experimenting with jQuery (AJAX)"
     div(class="container border")
       button#btn_AJAXPerformSelectQuery(type="button" class="btn btn-primary")="Perform Select Query"
+      button#btn_JQEmptyOutPlanSelections(type="button" class="btn btn-primary")="Empty Out Select Plan"
     div(class="container border")
       form(method="get" action="")
         div(class="row")

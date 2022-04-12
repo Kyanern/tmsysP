@@ -130,6 +130,21 @@ module.exports = {
     getDbTaskSchemaColDateCreate: () => {
         return `${dbConfigs.dbTaskSchemaColDateCreate}`;
     },
+    getDbTaskSchemaColStateEnumOpen: () => {
+        return `${dbConfigs.dbTaskSchemaColStateEnumOpen}`;
+    },
+    getDbTaskSchemaColStateEnumToDo: () => {
+        return `${dbConfigs.dbTaskSchemaColStateEnumToDo}`;
+    },
+    getDbTaskSchemaColStateEnumDoing: () => {
+        return `${dbConfigs.dbTaskSchemaColStateEnumDoing}`;
+    },
+    getDbTaskSchemaColStateEnumDone: () => {
+        return `${dbConfigs.dbTaskSchemaColStateEnumDone}`;
+    },
+    getDbTaskSchemaColStateEnumClosed: () => {
+        return `${dbConfigs.dbTaskSchemaColStateEnumClosed}`;
+    },
 
     getDbColFormat_CreateNewUser: () => { 
         return `${dbConfigs.dbLoginSchemaColUsername},${dbConfigs.dbLoginSchemaColPassword},${dbConfigs.dbLoginSchemaColEmail}`;
@@ -150,8 +165,12 @@ module.exports = {
         return `${dbConfigs.dbPlanSchemaColMVPName}, ${dbConfigs.dbPlanSchemaColDateStart}, ${dbConfigs.dbPlanSchemaColDateEnd}, ${dbConfigs.dbPlanSchemaColAcronym}`;
     },
     getDbColFormat_CreateTask: () => {
-        //TODO: Task_plan for when it's available.
+        //WARNING: Task_plan not included.
         return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColAcronym}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}`;
+    },
+    getDbColFormat_ListTasks: () => {
+        //this format retrieves just enough information to display in the task cards.
+        return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}, ${dbConfigs.dbTaskSchemaColDateCreate}`;
     },
     
 
@@ -181,6 +200,11 @@ module.exports = {
             console.log('\n***\n'+e+'\n***\n');
             return ({error: e});
         }
+    },
+
+    performQuery_selUsergroupsOfUser: async(username) => {
+        let myQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${username}'`;
+        return await performQuery(myQuery);
     },
 
     giveEscaped: (string) => {
