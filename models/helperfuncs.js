@@ -1,16 +1,20 @@
 module.exports = {
-  //takes a usergroup string (e.g. from a row in the usergroup table usergroup column)
-  //and makes it suitable for use in our regex operations
-  //returns a string.
-  //if you'd like a regex object instead, pass the return value
-  //of this function into a 'new RegExp()' call
+  /**
+   * Takes a usergroup string (e.g. from a row in the usergroup table usergroup column)
+   * and makes it suitable for use in our regex operations.
+   * ***
+   * Returns a string.
+   * ***
+   * If you'd like a regex object instead, pass the return value
+   * of this function into a 'new RegExp()' call.
+  **/
   regexfy_usergroup: (usergroup) => {
     usergroup = usergroup.replaceAll(',','|');
     usergroup = `(?:^|,)(${usergroup})(?:,|$)`;
     return usergroup;
   },
 
-  /**** 
+  /** 
    * Takes in an array of the following structure:
    * ***********************
    * [
@@ -31,7 +35,7 @@ module.exports = {
    * Ideally this property name should be captured from db.config.json
    * (through db.js model) instead of being hardcoded like this.
    * (This project has many instances of such stuff lolz)
-  ****/
+  **/
   regexfy_appAcronyms: (arr) => {
     // console.dir(arr);
     let retstr = new String();

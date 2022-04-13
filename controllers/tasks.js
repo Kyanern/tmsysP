@@ -126,7 +126,7 @@ router.post('/create',
     */
 
     let {Task_app_Acronym, Task_plan, Task_name, Task_description} = req.body;
-    console.log('Task_plan = ' + Task_plan);
+    //console.log('Task_plan = ' + Task_plan);
     //first query the running number
     let rnumQuery = `SELECT ${dbModel.getDbApplicationSchemaColRnumber()} FROM ${dbModel.getDbApplicationSchema()} WHERE ${dbModel.getDbApplicationSchemaColAcronym()} = '${Task_app_Acronym}'`;
     let retrnum = await dbModel.performQuery(rnumQuery);
@@ -158,7 +158,7 @@ router.post('/create',
     //if Task_plan value exists from user-submitted form then we add the value in.
     let qArguments = (Task_plan ? `(${Task_name},${Task_description},'${Task_id}','${Task_app_Acronym}','${Task_creator}','${Task_owner}', '${Task_plan}')` : `(${Task_name},${Task_description},'${Task_id}','${Task_app_Acronym}','${Task_creator}','${Task_owner}')`);
     let insQuery = qINSERT + qColFormat + qVALUES + qArguments;
-    console.log('insQuery = '+insQuery);
+    //console.log('insQuery = '+insQuery);
     let retins = await dbModel.performQuery(insQuery);
     if(retins.error){
       //console.dir(retins.error);

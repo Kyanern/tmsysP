@@ -169,8 +169,9 @@ module.exports = {
         return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColAcronym}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}`;
     },
     getDbColFormat_ListTasks: () => {
-        //this format retrieves just enough information to display in the task cards.
-        return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}, ${dbConfigs.dbTaskSchemaColDateCreate}`;
+        //this format retrieves just enough information to display in the task cards,
+        //and for permissions processing.
+        return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}, ${dbConfigs.dbTaskSchemaColDateCreate}, ${dbConfigs.dbTaskSchemaColAcronym}`;
     },
     
 
@@ -202,10 +203,10 @@ module.exports = {
         }
     },
 
-    performQuery_selUsergroupsOfUser: async(username) => {
-        let myQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${username}'`;
-        return await performQuery(myQuery);
-    },
+    // performQuery_selUsergroupsOfUser: async(username) => {
+    //     let myQuery = `SELECT ${dbConfigs.dbUsergroupsSchemaColUsergroup} FROM ${dbConfigs.dbUsergroupsSchema} WHERE ${dbConfigs.dbUsergroupsSchemaColUsername} = '${username}'`;
+    //     return await this.performQuery(myQuery);
+    // },
 
     giveEscaped: (string) => {
         return mysql.escape(string);

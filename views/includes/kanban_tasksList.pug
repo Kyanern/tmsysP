@@ -46,46 +46,93 @@ div(class="container")
   //-hr
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="Open"
-    div(class="d-flex flex-row flex-nowrap overflow-auto")
-      for taskOpen in taskOpenList
-      
-      //- div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-      //-     div(class="card-header ")="Task ID"
-      //-     h5(class="card-title ")="Card title"
-      //-     p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-      //- div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-      //-     div(class="card-header ")="Task ID"
-      //-     h5(class="card-title ")="Card title"
-      //-     p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-      //- div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-      //-     div(class="card-header ")="Task ID"
-      //-     h5(class="card-title ")="Card title"
-      //-     p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-      //- div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-      //-     div(class="card-header ")="Task ID"
-      //-     h5(class="card-title ")="Card title"
-      //-     p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-      //- div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-      //-     div(class="card-header ")="Task ID"
-      //-     h5(class="card-title ")="Card title"
-      //-     p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-      //- div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-      //-     div(class="card-header ")="Task ID"
-      //-     h5(class="card-title ")="Card title"
-      //-     p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
+    if errorOpen
+      p(class="alert alert-danger")=errorOpen
+    if infoOpen 
+      p(class="alert alert-info")=infoOpen
+    unless (errorOpen || infoOpen)
+      div(class="d-flex flex-row flex-nowrap overflow-auto")
+        for open in tasksOpen
+          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
+            div(class="card-header ")=open.Task_id
+            h5(class="card-title ")=open.Task_name
+            div(class="card-text text-truncate")=open.Task_description
+            hr
+            div(class="card-text ")="Creator: " + open.Task_creator
+            div(class="card-text ")="Owner: " + open.Task_owner
+            div(class="card-text ")="Date Created: " + open.Task_createDate
+            hr
+            div(class="d-grid gap-2")
+              button(class="btn btn-secondary mb-3" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-victim=open.Task_id name="btn_detailsTask" value=open.Task_id)="Details..."
+              //-div(class="col-6")
+                button(class="btn btn-primary" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-victim=open.Task_id name="btn_detailsTask" value=open.Task_id)="Details..."
+            if open.permitOpen
+              form(method="post" action="")
+                div(class="row g-3 align-items-center")
+                  div(class="col-8")
+                    select(class="form-select" aria-label="Select action" name="taskAction")
+                      option(value="taskAction_Open-ToDo")="Move to To-Do"
+                  div(class="col-4")
+                    button(type="submit" class="btn btn-primary" name="btn_taskAction" value=open.Task_id)="Apply"
+            
+
 
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="To-Do"
-    div(class="d-flex flex-row flex-nowrap overflow-auto")
+    if errorToDo
+      p(class="alert alert-danger")=errorToDo
+    if infoToDo
+      p(class="alert alert-info")=infoToDo
+    unless (errorToDo || infoToDo)
+      div(class="d-flex flex-row flex-nowrap overflow-auto")
+        for todo in tasksToDo
+          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
+            div(class="card-header ")=todo.Task_id
+            h5(class="card-title ")=todo.Task_name
+            div(class="card-text ")=todo.Task_description
+            hr
+            div(class="card-text ")="Creator: " + todo.Task_creator
+            div(class="card-text ")="Owner: " + todo.Task_owner
+            div(class="card-text ")="Date Created: " + todo.Task_createDate
 
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="Doing"
-    div(class="d-flex flex-row flex-nowrap overflow-auto")
+    if errorDoing
+      p(class="alert alert-danger")=errorDoing
+    if infoDoing
+      p(class="alert alert-info")=infoDoing
+    unless (errorDoing || infoDoing)
+      div(class="d-flex flex-row flex-nowrap overflow-auto")
+        for doing in tasksDoing
+          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
+            div(class="card-header ")="Task ID"
+            h5(class="card-title ")="Card title"
+            p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
 
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="Done"
-    div(class="d-flex flex-row flex-nowrap overflow-auto")
+    if errorDone
+      p(class="alert alert-danger")=errorDone
+    if infoDone
+      p(class="alert alert-info")=infoDone
+    unless (errorDone || infoDone)
+      div(class="d-flex flex-row flex-nowrap overflow-auto")
+        for done in tasksDone
+          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
+            div(class="card-header ")="Task ID"
+            h5(class="card-title ")="Card title"
+            p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
 
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="Closed"
-    div(class="d-flex flex-row flex-nowrap overflow-auto")
+    if errorClosed
+      p(class="alert alert-danger")=errorClosed
+    if infoClosed
+      p(class="alert alert-info")=infoClosed
+    unless (errorClosed || infoClosed)
+      div(class="d-flex flex-row flex-nowrap overflow-auto")
+        for closed in tasksClosed
+          div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
+            div(class="card-header ")="Task ID"
+            h5(class="card-title ")="Card title"
+            p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
