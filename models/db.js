@@ -173,7 +173,11 @@ module.exports = {
         //and for permissions processing.
         return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}, ${dbConfigs.dbTaskSchemaColDateCreate}, ${dbConfigs.dbTaskSchemaColAcronym}`;
     },
-    
+    getDbColFormat_TaskDetails: () => {
+        //this format retrieves all information of a Task.
+        //TODO: include notes
+        return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColPlan},  ${dbConfigs.dbTaskSchemaColAcronym}, ${dbConfigs.dbTaskSchemaColState}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}, ${dbConfigs.dbTaskSchemaColDateCreate}`
+    },
 
     establishDbConnection: () => {
         props.connection = mysql.createConnection(getDbConnectionString());

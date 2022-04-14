@@ -20,6 +20,41 @@ router.use(async (req, res, next) => {
 });
 
 router.get('/', 
+    //AJAX GET request for details of specific task
+    async (req,res,next)=>{
+        let {requestFrom} = req.query;
+        if(requestFrom !== 'detailsTaskModal'){
+            next();
+        } else {
+            let {value} = req.query;
+            let taskQuery = `SELECT ${dbModel.getDbColFormat_TaskDetails()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${value}'`;
+            let rettask = await dbModel.performQuery(taskQuery);
+            if(rettask.error){
+                //console.dir(rettask.error);
+                res.send({error: errorStr.internalErrorDB});
+                return;
+            }
+            if(rettask.result.length !== 1){
+                //console.log('There might be a problem with the database.');
+                res.send({error: errorStr.internalErrorDB});
+                return;
+            }
+            let t = rettask.result[0];
+            let task = {
+                id: t.Task_id,
+                name: t.Task_name,
+                desc: t.Task_description,
+                state: t.Task_state,
+                app: t.Task_app_Acronym,
+                plan: t.Task_plan,
+                creator: t.Task_creator,
+                owner: t.Task_owner,
+                dateCreate: helperModel.getDateFromDateObject(t.Task_createDate)
+            };
+            res.send(task);
+        }
+    },
+    //GET request for first entry
     async (req,res)=>{
         //first query what usergroups this user belong to.
         let grpQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${req.session.username}'`;
@@ -85,7 +120,7 @@ router.get('/',
         // reformat the dates
         let dateReformatter = (rows)=>{
             for(let i = 0; i < rows.length; i++){
-                let temp = (rows[i].Task_createDate.toISOString().split('T'))[0];
+                let temp = helperModel.getDateFromDateObject(rows[i].Task_createDate);
                 rows[i].Task_createDate = temp;
             }
         }

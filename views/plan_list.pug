@@ -102,18 +102,5 @@ html
       a(class="btn btn-link" href="/tmsys")="Back to menu"
       a(class="btn btn-link" href="/applications")="Applications List"
 
-  script.
-    var confirmDeleteAppModal = document.getElementById('deletePlanModal');
-    confirmDeleteAppModal.addEventListener('show.bs.modal', function (event){
-      //button that triggered modal
-      var button = event.relatedTarget;
-      //extract info from data-bs-* attribute
-      var info = button.getAttribute('data-bs-victim');
-      //update modal content
-      var modalTitle = document.getElementById('deletePlanModalLabel');
-      var modalBodyP = document.getElementById('deletePlanMVPNameText');
-      var btn_deleteApp = document.getElementById('btn_deletePlan');
-      modalTitle.textContent = 'Delete Plan ' + info;
-      modalBodyP.textContent = info;
-      btn_deleteApp.value = info;
-    });
+  script
+    include includes/modal_confirmPlanDelete.js

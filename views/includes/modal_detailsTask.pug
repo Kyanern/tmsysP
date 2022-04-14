@@ -1,0 +1,46 @@
+//- modal for task details (read-only)
+div(class="modal fade" id="detailsTaskModal" tabindex="-1" aria-labelledby="detailsTaskModalLabel" aria-hidden="true")
+  div(class="modal-dialog modal-dialog-scrollable")
+    div(class="modal-content")
+      div(class="modal-header")
+        h5(class="modal-title" id="detailsTaskModalLabel")="<TaskID> Details"
+        button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
+      div(class="modal-body")
+        div(class="container")
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Task ID:"
+            div#detailsTask_id(class="col-8")="<TaskID>"
+          hr
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Task Name:"
+            div#detailsTask_name(class="col-8")="<TaskName>"
+          hr
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Description:"
+            div#detailsTask_desc(class="col-8")="<TaskDescription>"
+          hr
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Task State:"
+            div#detailsTask_state(class="col-8")="<TaskState>"
+          hr
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Application:"
+            div#detailsTask_app(class="col-8")="<TaskApp>"
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Plan:"
+            div#detailsTask_plan(class="col-8")="<TaskPlan>"
+          hr
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Creator:"
+            div#detailsTask_creator(class="col-8")="<TaskCreator>"
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Owner:"
+            div#detailsTask_owner(class="col-8")="<TaskOwner>"
+          div(class="row g-3 align-items-center")
+            div(class="col-4")="Date created:"
+            div#detailsTask_dateCreate(class="col-8")="<TaskDateCreate>" 
+          //-TODO: add in note
+      div(class="modal-footer")
+        button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"
+        //-form(method="get" action="")
+          //-button#btn_editTask(type="submit" class="btn btn-danger" name="btn_editTask" value="<TaskID>")="Edit Task"

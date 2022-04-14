@@ -49,5 +49,13 @@ module.exports = {
     retstr = `(?:^|,)(${retstr})(?:,|$)`;
     // console.log(retstr);
     return retstr;
+  },
+
+  /**
+   * Takes in a Date object and returns the date substring of
+   * the ISO format datetime string
+   */
+  getDateFromDateObject: (obj) => {
+    return (obj.toISOString().split('T'))[0];
   }
 }

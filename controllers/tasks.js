@@ -78,7 +78,7 @@ router.use(async (req, res, next) => {
   next();
 });
 
-//GET request for create plan
+//GET request for create task
 router.get('/create',
   //AJAX GET request to populate plan list when an appplication is selected
   async (req,res,next)=>{
@@ -181,5 +181,10 @@ router.post('/create',
     renderCreateForm(req,res,null,`Task ${Task_id} successfully created.`);
   }
 );
+
+//TODO: GET request for edit task
+router.get('/edit', async(req,res)=>{
+
+})
 
 module.exports = router;

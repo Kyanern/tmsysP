@@ -63,7 +63,7 @@ div(class="container")
             div(class="card-text ")="Date Created: " + open.Task_createDate
             hr
             div(class="d-grid gap-2")
-              button(class="btn btn-secondary mb-3" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-victim=open.Task_id name="btn_detailsTask" value=open.Task_id)="Details..."
+              button(class="btn btn-secondary mb-3" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-task=open.Task_id name="btn_detailsTask" value=open.Task_id)="Details..."
               //-div(class="col-6")
                 button(class="btn btn-primary" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-victim=open.Task_id name="btn_detailsTask" value=open.Task_id)="Details..."
             if open.permitOpen
