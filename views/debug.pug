@@ -9,10 +9,12 @@ html(style="height: -webkit-fill-available")
       var $jq = jQuery.noConflict();
       var btn_selectQuery;
       var btn_emptyOutPlan;
+      var btn_noteData;
       $jq( document ).ready(function() {
         console.log( "document loaded" );
         btn_selectQuery = $jq("#btn_AJAXPerformSelectQuery");
         btn_emptyOutPlan = $jq("#btn_JQEmptyOutPlanSelections");
+        btn_noteData = $jq('#btn_AJAXNoteData');
         if(btn_emptyOutPlan.length){
           console.log("successfully attached #btn_JQEmptyOutPlanSelections to var btn_emptyOutPlan");
           btn_emptyOutPlan.click(function(){
@@ -47,6 +49,33 @@ html(style="height: -webkit-fill-available")
               });
           });
         }
+        if(btn_noteData.length){
+          console.log("successfully attached #btn_AJAXNoteData to var btn_noteData");
+          btn_noteData.click(function(){
+            $jq.ajax({
+              url:"debug",
+              data:{
+                btn: "btn_AJAXNoteData"
+              },
+              type:"GET",
+              dataType:"json",
+              cache:false
+            })
+            .done(function(json){
+                console.log("btn_noteData clicked and the server returned some json");
+                console.log(json);
+            })
+            .fail(function(xhr, status, errorThrown){
+              alert( "Sorry, there was a problem!" );
+              console.log( "Error: " + errorThrown );
+              console.log( "Status: " + status );
+              console.dir( xhr );
+            })
+            .always(function(xhr,status){
+              alert( "The request is complete!" );
+            });
+          })
+        }
       });
       $jq( window ).on( "load", function() {
           console.log( "window loaded" );
@@ -60,6 +89,7 @@ html(style="height: -webkit-fill-available")
     div(class="container border")
       button#btn_AJAXPerformSelectQuery(type="button" class="btn btn-primary")="Perform Select Query"
       button#btn_JQEmptyOutPlanSelections(type="button" class="btn btn-primary")="Empty Out Select Plan"
+      button#btn_AJAXNoteData(type="button" class="btn btn-primary")="Give dummy note data to axax_1"
     div(class="container border")
       form(method="get" action="")
         div(class="row")

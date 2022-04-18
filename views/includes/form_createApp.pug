@@ -3,36 +3,36 @@ form(method="post" action="")
   div(class="modal fade" id="createAppModal" tabindex="-1" aria-labelledby="createAppModalLabel" aria-hidden="true")
     div(class="modal-dialog modal-dialog-scrollable")
       div(class="modal-content")
-          div(class="modal-header")
-            h5(class="modal-title" id="createAppModalLabel")="Create Application"
-            button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
-          div(class="modal-body")
-            div(class="container")
-                label(for="createAppAcronym" class="form-label")="Application Acronym:"
-                input#createAppAcronym(type="text" name="createAppAcronym" class="form-control" )
-                label(for="createAppNumber" class="form-label")="Application Running Number Start Value (min 1):"
-                input#createAppNumber(type="number" name="createAppNumber" class="form-control" value="1" min="1")
-                label(for="createAppDescription" class="form-label")="Application Description:"
-                textarea#createAppDescription(rows="3" name="createAppDescription" class="form-control" )
-                label(for="createAppDateStart" class="form-label")="Start Date:"
-                input#createAppDateStart(type="date" name="createAppDateStart" class="form-control" )
-                label(for="createAppDateEnd" class="form-label")="End Date:"
-                input#createAppDateEnd(type="date" name="createAppDateEnd" class="form-control" )
-                hr
-                label(for="createAppPermitOpen" class="form-label")="Grant 'Open' state permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitOpen(type="text" name="createAppPermitOpen" class="form-control" )
-                label(for="createAppPermitToDo" class="form-label")="Grant 'ToDo' state permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitToDo(type="text" name="createAppPermitToDo" class="form-control" )
-                label(for="createAppPermitDoing" class="form-label")="Grant 'Doing' state permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitDoing(type="text" name="createAppPermitDoing" class="form-control" )
-                label(for="createAppPermitDone" class="form-label")="Grant 'Done' state permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitDone(type="text" name="createAppPermitDone" class="form-control" )
-                hr
-                label(for="createAppPermitCreatePlan" class="form-label")="Grant 'Create Plan' permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitCreatePlan(type="text" name="createAppPermitCreatePlan" class="form-control" )
-                label(for="createAppPermitCreateTask" class="form-label")="Grant 'Create Task' permissions to these usergroups: (comma-delimited)"
-                input#createAppPermitCreateTask(type="text" name="createAppPermitCreateTask" class="form-control" )
-          div(class="modal-footer")
-            button(type="reset" class="btn btn-danger" data-bs-dismiss="modal")="Close And Discard"
-            button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"
-            button(type="submit" class="btn btn-primary" name="btn_createApp" value=true)="Create Application"
+        div(class="modal-header")
+          h5(class="modal-title" id="createAppModalLabel")="Create Application"
+          button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
+        div(class="modal-body")
+          div(class="container")
+              label(for="createAppAcronym" class="form-label")="Application Acronym:"
+              input#createAppAcronym(type="text" name="createAppAcronym" class="form-control" )
+              label(for="createAppNumber" class="form-label")="Application Running Number Start Value (min 1):"
+              input#createAppNumber(type="number" name="createAppNumber" class="form-control" value="1" min="1")
+              label(for="createAppDescription" class="form-label")="Application Description:"
+              textarea#createAppDescription(rows="3" name="createAppDescription" class="form-control" )
+              label(for="createAppDateStart" class="form-label")="Start Date:"
+              input#createAppDateStart(type="date" name="createAppDateStart" class="form-control" )
+              label(for="createAppDateEnd" class="form-label")="End Date:"
+              input#createAppDateEnd(type="date" name="createAppDateEnd" class="form-control" )
+              hr
+              label(for="createAppPermitOpen" class="form-label")="Grant 'Open' state permissions to these usergroups: (comma-delimited)"
+              input#createAppPermitOpen(type="text" name="createAppPermitOpen" class="form-control" )
+              label(for="createAppPermitToDo" class="form-label")="Grant 'ToDo' state permissions to these usergroups: (comma-delimited)"
+              input#createAppPermitToDo(type="text" name="createAppPermitToDo" class="form-control" )
+              label(for="createAppPermitDoing" class="form-label")="Grant 'Doing' state permissions to these usergroups: (comma-delimited)"
+              input#createAppPermitDoing(type="text" name="createAppPermitDoing" class="form-control" )
+              label(for="createAppPermitDone" class="form-label")="Grant 'Done' state permissions to these usergroups: (comma-delimited)"
+              input#createAppPermitDone(type="text" name="createAppPermitDone" class="form-control" )
+              hr
+              label(for="createAppPermitCreatePlan" class="form-label")="Grant 'Create Plan' permissions to these usergroups: (comma-delimited)"
+              input#createAppPermitCreatePlan(type="text" name="createAppPermitCreatePlan" class="form-control" )
+              label(for="createAppPermitCreateTask" class="form-label")="Grant 'Create Task' permissions to these usergroups: (comma-delimited)"
+              input#createAppPermitCreateTask(type="text" name="createAppPermitCreateTask" class="form-control" )
+        div(class="modal-footer")
+          button(type="reset" class="btn btn-danger" data-bs-dismiss="modal")="Close And Discard"
+          button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"
+          button(type="submit" class="btn btn-primary" name="btn_createApp" value=true)="Create Application"

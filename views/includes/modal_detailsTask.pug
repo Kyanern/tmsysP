@@ -39,8 +39,8 @@ div(class="modal fade" id="detailsTaskModal" tabindex="-1" aria-labelledby="deta
           div(class="row g-3 align-items-center")
             div(class="col-4")="Date created:"
             div#detailsTask_dateCreate(class="col-8")="<TaskDateCreate>" 
-          //-TODO: add in note
+          hr#detailsTask_notesFirstHR
       div(class="modal-footer")
         button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"
-        //-form(method="get" action="")
-          //-button#btn_editTask(type="submit" class="btn btn-danger" name="btn_editTask" value="<TaskID>")="Edit Task"
+        form(method="get" action="")
+          button#btn_editTask(type="submit" class="btn btn-primary" name="btn_editTask" value="<TaskID>")="Edit Task"

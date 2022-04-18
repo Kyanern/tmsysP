@@ -66,6 +66,56 @@ let renderCreateForm = async (req,res,finalError,finalSuccess) => {
   });
 };
 
+let renderEditForm = async(req,res,finalError,finalSuccess) => {
+  //from value of btn_editTask, query for information
+  let taskQuery = `SELECT ${dbModel.getDbColFormat_TaskDetails()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_editTask}'`;
+  let rettask = await dbModel.performQuery(taskQuery);
+  if(rettask.error){
+    let options = {
+      isLoggedIn: req.session.isLoggedIn,
+      error: errorStr.internalErrorDB,
+      errorSpecial: finalError,
+      success: finalSuccess
+    }
+    //console.dir(rettask.error);
+    res.render('task_edit', options);
+    return;
+  }
+  if(rettask.result.length !== 1){
+    //console.log('rettask.result.length !== 1');
+    //console.log('There might be a problem with the database.');
+    let options = {
+      isLoggedIn: req.session.isLoggedIn,
+      error: errorStr.internalErrorDB,
+      errorSpecial: finalError,
+      success: finalSuccess
+    }
+    res.render('task_edit', options);
+    return;
+  }
+  let t = rettask.result[0];
+  t.Task_notes = JSON.parse(t.Task_notes);
+  let task = {
+    id: t.Task_id,
+    name: t.Task_name,
+    desc: t.Task_description,
+    state: t.Task_state,
+    app: t.Task_app_Acronym,
+    plan: t.Task_plan,
+    creator: t.Task_creator,
+    owner: t.Task_owner,
+    dateCreate: helperModel.getDateFromDateObject(t.Task_createDate),
+    notes: t.Task_notes
+  };
+  let options = {
+    isLoggedIn: req.session.isLoggedIn,
+    errorSpecial: finalError,
+    success: finalSuccess,
+    task: task
+  };
+  res.render('task_edit', options);
+};
+
 router.use(async (req, res, next) => {
   // console.log('Time: ', Date.now());
 
@@ -183,8 +233,16 @@ router.post('/create',
 );
 
 //TODO: GET request for edit task
-router.get('/edit', async(req,res)=>{
-
-})
+router.get('/edit', 
+  //normal GET request
+  async(req,res,next)=>{
+    let {btn_editTask} = req.query;
+    if(!btn_editTask){
+      next();
+    } else {
+      
+    }
+  }
+);
 
 module.exports = router;

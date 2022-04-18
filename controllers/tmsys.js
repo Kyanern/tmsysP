@@ -35,11 +35,16 @@ router.get('/',
                 return;
             }
             if(rettask.result.length !== 1){
+                //console.log('rettask.result.length !== 1');
                 //console.log('There might be a problem with the database.');
                 res.send({error: errorStr.internalErrorDB});
                 return;
             }
             let t = rettask.result[0];
+            //process notes from stringified json object into normal json object
+            //console.dir(t.Task_notes); //DEBUG LOG
+            t.Task_notes = JSON.parse(t.Task_notes);
+            //console.dir(t.Task_notes); //DEBUG LOG
             let task = {
                 id: t.Task_id,
                 name: t.Task_name,
@@ -49,7 +54,8 @@ router.get('/',
                 plan: t.Task_plan,
                 creator: t.Task_creator,
                 owner: t.Task_owner,
-                dateCreate: helperModel.getDateFromDateObject(t.Task_createDate)
+                dateCreate: helperModel.getDateFromDateObject(t.Task_createDate),
+                notes: t.Task_notes
             };
             res.send(task);
         }

@@ -175,8 +175,7 @@ module.exports = {
     },
     getDbColFormat_TaskDetails: () => {
         //this format retrieves all information of a Task.
-        //TODO: include notes
-        return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColPlan},  ${dbConfigs.dbTaskSchemaColAcronym}, ${dbConfigs.dbTaskSchemaColState}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}, ${dbConfigs.dbTaskSchemaColDateCreate}`
+        return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColPlan},  ${dbConfigs.dbTaskSchemaColAcronym}, ${dbConfigs.dbTaskSchemaColState}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}, ${dbConfigs.dbTaskSchemaColDateCreate}, ${dbConfigs.dbTaskSchemaColNotes}`
     },
 
     establishDbConnection: () => {
