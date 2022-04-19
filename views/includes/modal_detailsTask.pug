@@ -42,5 +42,5 @@ div(class="modal fade" id="detailsTaskModal" tabindex="-1" aria-labelledby="deta
           hr#detailsTask_notesFirstHR
       div(class="modal-footer")
         button(type="button" class="btn btn-secondary" data-bs-dismiss="modal")="Close"
-        form(method="get" action="")
+        form(method="get" action="/tasks/edit")
           button#btn_editTask(type="submit" class="btn btn-primary" name="btn_editTask" value="<TaskID>")="Edit Task"

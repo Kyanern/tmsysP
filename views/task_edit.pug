@@ -25,25 +25,72 @@ html
       hr
 
       form(method="post" action="")
-        div(class="mb-3")
-        //-TODO: make the edit task form.
-      //-
-        label(for="taskAppAcronym" class="col-2 col-form-label")="For Application:"
-        select#taskAppAcronym(class="form-select" aria-label="Select application" name="Task_app_Acronym")
-          for a in appList
-            option(value=a.App_Acronym)=a.App_Acronym
-        label(for="taskPlan" class="col-2 col-form-label")="For Plan:"
-        select#taskPlan(class="form-select" aria-label="Select plan" name="Task_plan")
-        label(for="taskName" class="form-label")="Task Name"
-        input#taskName(type="text" name="Task_name" class="form-control" )
-        label(for="taskDescription" class="form-label")="Task Description:"
-        textarea#taskDescription(rows="6" name="Task_description" class="form-control" )
-        button(type="submit" class="btn btn-primary" name="btn_createTask" value=true)="Create Task"
+        div(class="row g-3 align-items-center")
+          label(for="taskID" class="col-form-label")="Task ID:"
+        div(class="row g-0 align-items-center")
+          input#taskID(type="text" name="id" readonly class="form-control-plaintext" value=task.id)
+        div(class="row g-3 align-items-center")
+          label(for="taskName" class=" col-form-label")="Task Name:"
+        div(class="row g-0 align-items-center")
+          input#taskName(type="text" name="nameNew" class="form-control" value=task.name)
+          input(type="text" name="name" class="d-none" value=task.name)
+        div(class="row g-3 align-items-center")
+          label(for="taskDesc" class="col-form-label")="Task Description:"
+        div(class="row g-0 align-items-center")
+          textarea#taskDesc(rows="6" name="descNew" class="form-control" value=task.desc)=task.desc
+          textarea(name="desc" class="d-none" value=task.desc)=task.desc 
+        hr
+        div(class="row g-3 align-items-center")
+          div(class="col-2")="Task State:"
+          div(class="col-7")=task.state
+          input(type="text" name="state" class="d-none" value=task.state) 
+        div(class="row g-3 align-items-center")
+          div(class="col-2")="Attached to Application:"
+          div(class="col-7")=task.app
+        div(class="row g-3 align-items-center")
+          div(class="col-2")
+            label(for="taskPlan" class="col-form-label")="Attach to Plan:"
+          div(class="col-7")
+            select#taskPlan(class="form-select" aria-label="Select plan" name="planNew")
+              option(value="")="(detach from plans)"
+              for p in task.planList 
+                option(value=p.mvp selected=(p.mvp===task.plan?true:false))=p.mvp
+          input(type="text" name="plan" class="d-none" value=task.plan)
+        hr
+        div(class="row g-3 align-items-center")
+          div(class="col-3")="Creator:"
+          div(class="col-9")=task.creator
+        div(class="row g-3 align-items-center")
+          div(class="col-3")="Owner:"
+          div(class="col-9")=task.owner
+        div(class="row g-3 align-items-center")
+          div(class="col-3")="Date Created:"
+          div(class="col-9")=task.dateCreate
+        hr
+        div(class="row g-3 align-items-center")
+          label(for="taskNote" class="col-3 col-form-label")="New Note (leave blank to not add)"
+          textarea#taskNote(rows="6" name="noteNew" class="form-control")
+        hr
+        a(class="btn btn-link" href="/tmsys")="Back to menu"
+        button(type="submit" class="btn btn-primary" name="btn_saveEdits" value=true)="Save Edit(s)"
+        hr
+        h4="Notes History"
+        if(task.notes)
+          for n in task.notes 
+            hr
+            div(class="row g-3 align-items-center")
+              div(class="col-3")="By:"
+              div(class="col-9")=n.user
+            div(class="row g-3 align-items-center")
+              div(class="col-3")="At Task State:"
+              div(class="col-9")=n.taskState
+            div(class="row g-3 align-items-center")
+              div(class="col-3")="Timestamp:"
+              div(class="col-9")=n.datetime
+            div(class="row g-3 align-items-center")
+              div(class="border")=n.content
 
       hr
       div(class="row")
         div(class="col")
           a(class="btn btn-link" href="/tmsys")="Back to menu"
-
-    script
-      include includes/task_create.js

@@ -66,9 +66,9 @@ let renderCreateForm = async (req,res,finalError,finalSuccess) => {
   });
 };
 
-let renderEditForm = async(req,res,finalError,finalSuccess) => {
+let renderEditForm = async(taskid,req,res,finalError,finalSuccess) => {
   //from value of btn_editTask, query for information
-  let taskQuery = `SELECT ${dbModel.getDbColFormat_TaskDetails()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_editTask}'`;
+  let taskQuery = `SELECT ${dbModel.getDbColFormat_TaskDetails()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${taskid}'`;
   let rettask = await dbModel.performQuery(taskQuery);
   if(rettask.error){
     let options = {
@@ -93,8 +93,36 @@ let renderEditForm = async(req,res,finalError,finalSuccess) => {
     res.render('task_edit', options);
     return;
   }
+  //Also have to find out what plans we can attach to.
+  //A task must be attached to an application
+  //so I won't check for no app error 
+  //(but for safety reasons it should be done)
+  let planQuery = `SELECT ${dbModel.getDbPlanSchemaColMVPName()} AS 'mvp' FROM ${dbModel.getDbPlanSchema()} WHERE ${dbModel.getDbPlanSchemaColAcronym()} = '${rettask.result[0].Task_app_Acronym}'`;
+  let retplan = await dbModel.performQuery(planQuery);
+  if(retplan.error){
+    let options = {
+      isLoggedIn: req.session.isLoggedIn,
+      error: errorStr.internalErrorDB,
+      errorSpecial: finalError,
+      success: finalSuccess
+    }
+    //console.dir(retplan.error);
+    res.render('task_edit', options);
+    return;
+  }
+  let p = retplan.result;
   let t = rettask.result[0];
   t.Task_notes = JSON.parse(t.Task_notes);
+  //preprocess the timestamps for display here.
+  //because unlike in modal_detailsTask.pug,
+  //i do not intend to have js in task_edit.pug
+  //to process the data.
+  if(t.Task_notes){
+    for(let i = 0; i < t.Task_notes.length; i++){
+      let note = t.Task_notes[i];
+      note.datetime = (new Date(note.datetime)).toLocaleString();
+    }
+  }
   let task = {
     id: t.Task_id,
     name: t.Task_name,
@@ -104,8 +132,9 @@ let renderEditForm = async(req,res,finalError,finalSuccess) => {
     plan: t.Task_plan,
     creator: t.Task_creator,
     owner: t.Task_owner,
-    dateCreate: helperModel.getDateFromDateObject(t.Task_createDate),
-    notes: t.Task_notes
+    dateCreate: (new Date(t.Task_createDate)).toLocaleString(),
+    notes: t.Task_notes,
+    planList: p
   };
   let options = {
     isLoggedIn: req.session.isLoggedIn,
@@ -240,7 +269,7 @@ router.get('/edit',
     if(!btn_editTask){
       next();
     } else {
-      
+      renderEditForm(btn_editTask,req,res);
     }
   }
 );
