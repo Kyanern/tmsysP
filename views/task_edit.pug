@@ -41,20 +41,20 @@ html
           textarea(name="desc" class="d-none" value=task.desc)=task.desc 
         hr
         div(class="row g-3 align-items-center")
-          div(class="col-2")="Task State:"
+          div(class="col-3")="Task State:"
           div(class="col-7")=task.state
           input(type="text" name="state" class="d-none" value=task.state) 
         div(class="row g-3 align-items-center")
-          div(class="col-2")="Attached to Application:"
+          div(class="col-3")="Attached to Application:"
           div(class="col-7")=task.app
         div(class="row g-3 align-items-center")
-          div(class="col-2")
+          div(class="col-3")
             label(for="taskPlan" class="col-form-label")="Attach to Plan:"
-          div(class="col-7")
+          div(class="col-3")
             select#taskPlan(class="form-select" aria-label="Select plan" name="planNew")
               option(value="")="(detach from plans)"
               for p in task.planList 
-                option(value=p.mvp selected=(p.mvp===task.plan?true:false))=p.mvp
+                option(value=p.mvp selected=(p.mvp===task.plan?true:false))=p.mvp + (p.mvp===task.plan?" (current)":"")
           input(type="text" name="plan" class="d-none" value=task.plan)
         hr
         div(class="row g-3 align-items-center")
@@ -88,7 +88,7 @@ html
               div(class="col-3")="Timestamp:"
               div(class="col-9")=n.datetime
             div(class="row g-3 align-items-center")
-              div(class="border")=n.content
+              div(class="border" style="white-space: pre-wrap")=n.content
 
       hr
       div(class="row")

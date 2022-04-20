@@ -261,7 +261,6 @@ router.post('/create',
   }
 );
 
-//TODO: GET request for edit task
 router.get('/edit', 
   //normal GET request
   async(req,res,next)=>{
@@ -270,6 +269,80 @@ router.get('/edit',
       next();
     } else {
       renderEditForm(btn_editTask,req,res);
+    }
+  }
+);
+
+router.post('/edit', 
+  //normal POST request from a btn_saveEdits button
+  async(req,res,next)=>{
+    let{btn_saveEdits} = req.body;
+    if(!btn_saveEdits){
+      next();
+    } else {
+      //TODO: do the edit task processing.
+      //read-only and 'before/old' values
+      let {id, name, desc, state, plan} = req.body;
+      //'after/new' values
+      let {nameNew, descNew, planNew, noteNew} = req.body;
+      let myQuery = `UPDATE ${dbModel.getDbTaskSchema()} SET `;
+      let myStack = [];
+
+      if(nameNew !== name){
+        myStack.push(`${dbModel.getDbTaskSchemaColName()}='${nameNew}'`);
+        //console.log('pushed new task name to stack');
+      }
+      if(descNew !== desc){
+        myStack.push(`${dbModel.getDbTaskSchemaColDescription()}='${descNew}'`);
+        //console.log('pushed new task description to stack');
+      }
+      if(planNew !== plan){
+        myStack.push(`${dbModel.getDbTaskSchemaColPlan()}='${planNew}'`);
+        //console.log('pushed new task plan to stack');
+      }
+      if(noteNew){
+        //query exisiting notes then add on top.
+        let notesQuery = `SELECT ${dbModel.getDbTaskSchemaColNotes()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()}='${id}'`;
+        let retnotes = await dbModel.performQuery(notesQuery);
+        if(retnotes.error){
+          //console.dir(retnotes.error)
+          renderEditForm(id, req,res,errorStr.internalErrorDB);
+          return;
+        }
+        let arr;
+        if(retnotes.result){
+          arr = JSON.parse(retnotes.result[0].Task_notes);
+          
+        } else {
+          arr = new Array();
+        }
+        arr.unshift({
+          user:req.session.username,
+          taskState:state,
+          content:noteNew,
+          datetime:(new Date()).toISOString()
+        });
+        arr = JSON.stringify(arr);
+        myStack.push(`${dbModel.getDbTaskSchemaColNotes()}`+'='+dbModel.giveEscaped(arr));
+        //console.log('pushed new task note(s) to stack')
+      }
+      if(!myStack.length){
+        renderEditForm(id,req,res,errorStr.nothingToModify);
+        return;
+      }
+      while(myStack.length){  //might be dangerous...?
+        myQuery += myStack.pop();
+        if(myStack.length) myQuery += ',';
+      }
+      myQuery += ` WHERE ${dbModel.getDbTaskSchemaColID()}='${id}';`;
+      //perform query
+      let retQ = await dbModel.performQuery(myQuery);
+      if(retQ.error){
+        console.dir(retQ.error);
+        renderEditForm(id,req,res,errorStr.internalErrorDB);
+        return;
+      }
+      renderEditForm(id,req,res,null,`Task ${id} successfully edited.`);
     }
   }
 );

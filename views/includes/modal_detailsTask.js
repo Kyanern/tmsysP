@@ -90,7 +90,7 @@ detailsTaskModal.addEventListener('show.bs.modal', function(event){
             "<div class=\"col-8 tmsys-tasknote\">" + Date(note.datetime).toLocaleString() + "</div>" +
           "</div>" +
           "<div class=\"row g-3 align-items-center tmsys-tasknote\">" +
-            "<div class=\"tmsys-tasknote\">"+note.content+"</div>"+
+            "<div class=\"border tmsys-tasknote\" style=\"white-space: pre-wrap\">"+note.content+"</div>"+
           "</div><hr class=\"tmsys-tasknote\">"
         );
       }
