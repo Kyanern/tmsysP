@@ -7,8 +7,6 @@ html
   body
     div(class="container")
       h2(class="pb-2 border-bottom")="Task Management System - Edit Task"
-        if isLoggedIn
-          a(class="btn btn-link" href="/logout")="Logout"
 
       if error
         p(class="alert alert-danger")=error
@@ -21,7 +19,7 @@ html
 
       div(class="row")
         div(class="col")
-          a(class="btn btn-link" href="/tmsys")="Back to menu"
+          a(class="btn btn-link" href="/tmsys/frame_main")="Back to menu"
       hr
 
       form(method="post" action="")
@@ -71,7 +69,7 @@ html
           label(for="taskNote" class="col-3 col-form-label")="New Note (leave blank to not add)"
           textarea#taskNote(rows="6" name="noteNew" class="form-control")
         hr
-        a(class="btn btn-link" href="/tmsys")="Back to menu"
+        a(class="btn btn-link" href="/tmsys/frame_main")="Back to menu"
         button(type="submit" class="btn btn-primary" name="btn_saveEdits" value=true)="Save Edit(s)"
         hr
         h4="Notes History"
@@ -93,4 +91,4 @@ html
       hr
       div(class="row")
         div(class="col")
-          a(class="btn btn-link" href="/tmsys")="Back to menu"
+          a(class="btn btn-link" href="/tmsys/frame_main")="Back to menu"

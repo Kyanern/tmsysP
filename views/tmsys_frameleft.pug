@@ -1,0 +1,70 @@
+html
+  head 
+    title="Task Management System"
+    link(href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous")
+    script(src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous")
+  body 
+    div(class="container")
+      div(class="d-flex align-items-baseline justify-content-between")
+        h2="TMSYS"
+        a(class="btn btn-danger btn-sm" href="/logout")="Logout"
+      hr
+      if error
+        p(class="alert alert-danger")=error
+        hr
+
+      div(class="container")
+        div(class="row")="Create:"
+        div(class="d-grid gap-1")
+          button(type="button" class="btn btn-outline-primary")="Application"
+          button(type="button" class="btn btn-outline-primary")="Plan"
+          button(type="button" class="btn btn-outline-primary")="Task"
+      
+      div(class="container")
+        div(class="row")="View Tasks for:"
+        div(class="d-grid gap-1")
+          if appList 
+            for app in appList 
+              button(type="button" class="btn btn-outline-primary tmsys-btn-taskfilterer" data-tmsys-filter=app.name)=app.name
+
+    script.
+      var frame_main = parent.frames['tmsys-frame-main'];
+      frame_main.addEventListener('tmsys-event-taskfilter', function (event){
+        //-button that triggered modal
+        var button = event.target;
+        //-extract info from data-bs-* attribute
+        var info = button.getAttribute('data-tmsys-filter');
+        console.dir(button);
+        console.dir(info);
+      });
+
+      $fljq = jQuery.noConflict();
+      $fljq(document).ready(function(){
+        $fljq(".tmsys-btn-taskfilterer").click(function(){
+          const event = new Event('tmsys-event-taskfilter');
+          frame_main.dispatchEvent(event);
+        });
+      });
+      //- $fljq = jQuery.noConflict();
+      //- var frame_main;
+      //- $fljq(document).ready(function(){
+      //-   //-setup main frame to handle events from left frame buttons
+      //-   //-frame_main = parent.frames['tmsys-frame-main'];
+      //-   frame_main = $fljq('frame[name=tmsys-frame-main]', parent.document);
+      //-   console.dir(frame_main[0]);
+      //-   frame_main.on("tmsys-event-taskfilter", function(event){
+      //-     //-get triggering button
+      //-     var button = event.target;
+      //-     //-extract info from data-tmsys-* attribute
+      //-     var info = button.getAttribute('data-tmsys-filter');
+      //-     //-redirect main frame
+      //-     //-by right, there should be some sort of authorization request here.
+      //-     //-and also possibly some way to refresh the application list if authorization request failed.
+      //-     //-frame_main.location.href = "/tmsys/frame_main?requestapp="+info;
+      //-     frame_main.attr('href', "/tmsys/frame_main?requestapp="+info);
+      //-   });
+      //-   $fljq(".tmsys-btn-taskfilterer").click(function(){
+      //-     frame_main.trigger("tmsys-event-taskfilter");
+      //-   });
+      //- });

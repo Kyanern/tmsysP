@@ -6,8 +6,6 @@ html
   body
     div(class="container")
       h2(class="pb-2 border-bottom")="Task Management System - Applications List"
-        if isLoggedIn
-          a(class="btn btn-link" href="/logout")="Logout"
 
       if error
         p(class="alert alert-danger")=error
@@ -18,7 +16,7 @@ html
       if success
         p(class="alert alert-success")=success
 
-      a(class="btn btn-link" href="/tmsys")="Back to menu"
+      a(class="btn btn-link" href="/tmsys/frame_main")="Back to menu"
       a(class="btn btn-link" href="/plans")="Plans List"
       hr
 
@@ -171,7 +169,7 @@ html
         div(class="row")
           a(class="col-auto btn btn-link" href="/applications")="Back to search"
       hr
-      a(class="btn btn-link" href="/tmsys")="Back to menu"
+      a(class="btn btn-link" href="/tmsys/frame_main")="Back to menu"
       a(class="btn btn-link" href="/plans")="Plans List"
 
   script

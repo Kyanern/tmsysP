@@ -11,11 +11,12 @@ html
 
     div(class="container")
       h2(class="pb-2 border-bottom")="Task Management System"
-        if isLoggedIn
-          a(class="btn btn-link" href="/logout")="Logout"
 
       if error
         p(class="alert alert-danger")=error
+
+      if errorSpecial
+        p(class="alert alert-danger")=errorSpecial
 
       if success
         p(class="alert alert-success")=success
