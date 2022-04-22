@@ -105,12 +105,6 @@ html
                         div(class="col-auto")
                           button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deleteAppModal" data-bs-victim=app.App_Acronym name="btn_deleteThisApp" value=app.App_Acronym)="Delete"
                 include includes/modal_confirmAppDelete.pug
-                        //-if app.canCreatePlan === true
-                          div(class="col-auto")
-                            button(class="btn btn-primary mb-3" type="button" disabled)="Create Plan"
-                        //-if app.canCreateTask === true
-                          div(class="col-auto")
-                            button(class="btn btn-primary mb-3" type="button" disabled)="Create Task"
       if isEditingApplication
         div(class="row")
           a(class="col-auto btn btn-link" href="/applications")="Back to search"

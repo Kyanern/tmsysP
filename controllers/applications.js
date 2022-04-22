@@ -86,7 +86,11 @@ let renderAppList = async (req, res, finalError, finalSuccess) => {
       success: finalSuccess
   });
 }
-// *** ***
+
+let renderCreateForm = async (req,res,finalError,finalSuccess) => {
+  req.body.isAdmin = await checksModel.checkGroup(req.session.username, 'admin');
+  res.render("app_create",{isLoggedIn: req.session.isLoggedIn, canAdmin: req.body.isAdmin, error:finalError, success:finalSuccess});
+}
 
 // middleware that is specific to this router
 router.use(async (req, res, next) => {
@@ -296,6 +300,35 @@ router.post('/',
       renderAppList(req, res, null, `Application '${btn_deleteApp}' deleted.`);
     }
   }
+)
+
+router.get('/create', async(req,res)=>{
+  renderCreateForm(req,res);
+})
+
+router.post('/create', 
+    //handles create application form button
+    async (req,res,next)=>{
+        //console.log('tmsys.js: Entered router.post /frame_main handles create application form button');
+        let {btn_createApp} = req.body;
+        if(!btn_createApp){
+            next();
+        } else {
+            let {createAppAcronym, createAppNumber, createAppDescription, createAppDateStart, createAppDateEnd} = req.body;
+            let {createAppPermitOpen, createAppPermitToDo, createAppPermitDoing, createAppPermitDone, createAppPermitCreatePlan, createAppPermitCreateTask} = req.body;
+
+            let myQuery = `INSERT INTO ${dbModel.getDbApplicationSchema()}(${dbModel.getDbColFormat_CreateApplication()})`;
+            myQuery += ` VALUES('${createAppAcronym}', '${createAppNumber}', '${createAppDescription}','${createAppDateStart}','${createAppDateEnd}','${createAppPermitOpen}','${createAppPermitToDo}','${createAppPermitDoing}','${createAppPermitDone}','${createAppPermitCreatePlan}','${createAppPermitCreateTask}')`;
+            let retQ = await dbModel.performQuery(myQuery);
+            let error= retQ.error;
+            if(error){
+                //console.dir(error);
+                renderCreateForm(req,res,errorStr.internalErrorDB);
+                return;
+            }
+            renderCreateForm(req,res,null,`Application ${createAppAcronym} successfully created`);
+        }
+    }
 )
 
 module.exports = router;

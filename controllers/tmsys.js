@@ -67,7 +67,7 @@ router.get('/',
 );
 
 let renderFrameMain = async (req,res,finalError, finalSuccess) => {
-    console.log('tmsys.js: Entered renderFrameMain');
+    //console.log('tmsys.js: Entered renderFrameMain');
     //console.dir({req,res,finalError,finalSuccess});
     //first query what usergroups this user belong to.
     let grpQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${req.session.username}'`;
@@ -100,11 +100,10 @@ let renderFrameMain = async (req,res,finalError, finalSuccess) => {
     let qCond7 = `${dbModel.getDbApplicationSchemaColAcronym()} = '${requestapp}'`;
     //construct query
     let appQuery = qSELECTFROM + qWHERE;
+    appQuery += '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + qOR + qCond5 + qOR + qCond6 + ')';
     if(requestapp){
-        appQuery += qCond7;
-    } else {
-        appQuery += '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + qOR + qCond5 + qOR + qCond6 + ')';
-    } 
+        appQuery += qAND + qCond7;
+    }
     //console.log(appQuery);
     let retapp = await dbModel.performQuery(appQuery);
     if(retapp.error){
@@ -276,7 +275,7 @@ let renderFrameMain = async (req,res,finalError, finalSuccess) => {
 router.get('/frame_main',
     //GET request for first entry
     async (req,res)=>{
-        console.log('tmsys.js: Entered router.get /frame_main GET request for first entry');
+        //console.log('tmsys.js: Entered router.get /frame_main GET request for first entry');
         renderFrameMain(req,res);
     }
 );
@@ -284,7 +283,7 @@ router.get('/frame_main',
 router.post('/frame_main', 
     //handles create application form button
     async (req,res,next)=>{
-        console.log('tmsys.js: Entered router.post /frame_main handles create application form button');
+        //console.log('tmsys.js: Entered router.post /frame_main handles create application form button');
         let {btn_createApp} = req.body;
         if(!btn_createApp){
             next();
@@ -361,7 +360,7 @@ router.get('/frame_left',
             res.render('tmsys_frameleft', {isLoggedIn: req.session.isLoggedIn, canAdmin: req.body.isAdmin, error:errorStr.listTasksNoApps});
             return;
         }
-        res.render('tmsys_frameleft', {appList:retapp.result});
+        res.render('tmsys_frameleft', {isLoggedIn: req.session.isLoggedIn, canAdmin: req.body.isAdmin, appList:retapp.result});
     }
 );
 

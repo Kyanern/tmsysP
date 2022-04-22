@@ -6,8 +6,8 @@ html
     script(src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous")
   body
     include includes/modal_detailsTask.pug
-    if canAdmin
-      include includes/form_createApp.pug
+    //- if canAdmin
+    //-   include includes/form_createApp.pug
 
     div(class="container")
       h2(class="pb-2 border-bottom")="Task Management System"
@@ -23,34 +23,34 @@ html
 
       include includes/kanban_tasksList.pug
 
-      hr
-      div(class="row")
-        h4="Task Management"
-      div(class="row g-3")
-        button(class="col-2 btn btn-link" data-bs-toggle="modal" type="button" data-bs-target=(canAdmin?"#createAppModal":"#") disabled=(canAdmin?false:true))="Create Application"
-        a(class="col-2 btn btn-link" href="/plans/create")="Create Plan"
-        a(class="col-2 btn btn-link" href="/tasks/create")="Create Task"
-      div(class="row g-3")
-        a(class="col-2 btn btn-link" href="/applications" )="Applications List"
-        a(class="col-2 btn btn-link" href="/plans" )="Plans List"
+      //- hr
+      //- div(class="row")
+      //-   h4="Task Management"
+      //- div(class="row g-3")
+      //-   button(class="col-2 btn btn-link" data-bs-toggle="modal" type="button" data-bs-target=(canAdmin?"#createAppModal":"#") disabled=(canAdmin?false:true))="Create Application"
+      //-   a(class="col-2 btn btn-link" href="/plans/create")="Create Plan"
+      //-   a(class="col-2 btn btn-link" href="/tasks/create")="Create Task"
+      //- div(class="row g-3")
+      //-   a(class="col-2 btn btn-link" href="/applications" )="Applications List"
+      //-   a(class="col-2 btn btn-link" href="/plans" )="Plans List"
             
-      if(canAdmin)
-        hr
-        div(class="row")
-          h4="Admin controls"
+      //- if(canAdmin)
+      //-   hr
+      //-   div(class="row")
+      //-     h4="Admin controls"
         
-        div(class="row g-3")
-          a(class="col-2 btn btn-link" href="/admin/usercreate")="Create New User"
-          a(class="col-2 btn btn-link" href="/admin/useredit")="Edit User Details"
+      //-   div(class="row g-3")
+      //-     a(class="col-2 btn btn-link" href="/admin/usercreate")="Create New User"
+      //-     a(class="col-2 btn btn-link" href="/admin/useredit")="Edit User Details"
 
-      hr
+      //- hr
 
-      div(class="row")
-        h4="User settings"
+      //- div(class="row")
+      //-   h4="User settings"
 
-      div(class="row g-3")
-        a(class="col-2 btn btn-link" href="/user/passwordchange")="Change My Password"
-        a(class="col-2 btn btn-link" href="/user/emailchange")="Change My Email"
+      //- div(class="row g-3")
+      //-   a(class="col-2 btn btn-link" href="/user/passwordchange")="Change My Password"
+      //-   a(class="col-2 btn btn-link" href="/user/emailchange")="Change My Email"
 
     script
       include includes/modal_detailsTask.js

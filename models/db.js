@@ -206,11 +206,6 @@ module.exports = {
         }
     },
 
-    // performQuery_selUsergroupsOfUser: async(username) => {
-    //     let myQuery = `SELECT ${dbConfigs.dbUsergroupsSchemaColUsergroup} FROM ${dbConfigs.dbUsergroupsSchema} WHERE ${dbConfigs.dbUsergroupsSchemaColUsername} = '${username}'`;
-    //     return await this.performQuery(myQuery);
-    // },
-
     giveEscaped: (string) => {
         return mysql.escape(string);
     }

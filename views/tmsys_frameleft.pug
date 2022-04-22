@@ -17,54 +17,60 @@ html
       div(class="container")
         div(class="row")="Create:"
         div(class="d-grid gap-1")
-          button(type="button" class="btn btn-outline-primary")="Application"
-          button(type="button" class="btn btn-outline-primary")="Plan"
-          button(type="button" class="btn btn-outline-primary")="Task"
+          button#btn_createApp(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/applications/create")="Application"
+          button#btn_createPlan(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/plans/create")="Plan"
+          button#btn_createTask(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/tasks/create")="Task"
+      
+      div(class="container")
+        div(class="row")="View list of:"
+        div(class="d-grid gap-1")
+          button#btn_viewApps(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/applications")="Applications"
+          button#btn_viewPlans(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/plans")="Plans"
       
       div(class="container")
         div(class="row")="View Tasks for:"
         div(class="d-grid gap-1")
+          button(type="button" class="btn btn-outline-primary tmsys-btn-taskfilterer" value="")="(all apps)"
           if appList 
             for app in appList 
-              button(type="button" class="btn btn-outline-primary tmsys-btn-taskfilterer" data-tmsys-filter=app.name)=app.name
+              button(type="button" class="btn btn-outline-primary tmsys-btn-taskfilterer" value=app.name)=app.name
+
+      if canAdmin
+        div(class="container")
+          div(class="row")="User Management:"
+          div(class="d-grid gap-1")
+            button#btn_createUser(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/admin/usercreate")="Create New User"
+            button#btn_editUser(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/admin/useredit")="Edit User Details"
+
+      div(class="container")
+        div(class="row")="User Settings:"
+        div(class="d-grid gap-1")
+          button#btn_changePassword(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/user/passwordchange")="Change My Password"
+          button#btn_changeEmail(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/user/emailchange")="Change My Email"
 
     script.
-      var frame_main = parent.frames['tmsys-frame-main'];
-      frame_main.addEventListener('tmsys-event-taskfilter', function (event){
-        //-button that triggered modal
-        var button = event.target;
-        //-extract info from data-bs-* attribute
-        var info = button.getAttribute('data-tmsys-filter');
-        console.dir(button);
-        console.dir(info);
-      });
+      $jq = jQuery.noConflict();
+      var frame_main;
+      var btns_taskFilters;
+      $jq(document).ready(function(){
+        frame_main = $jq('#tmsys-frame-main',parent.document);
+        
+        //-event handler for filter task by app in tmsys page
+        frame_main.on('tmsys-taskByApp',function(event){
+          frame_main.attr('src',"/tmsys/frame_main?requestapp="+event.app);
+        })
+        //-event handler for changing frame_main src
+        .on('tmsys-gotoURL',function(event){
+          frame_main.attr('src',event.gotoURL);
+        });
 
-      $fljq = jQuery.noConflict();
-      $fljq(document).ready(function(){
-        $fljq(".tmsys-btn-taskfilterer").click(function(){
-          const event = new Event('tmsys-event-taskfilter');
-          frame_main.dispatchEvent(event);
+        //-filter task by app triggers
+        $jq(".tmsys-btn-taskfilterer").on('click', function(event){
+          frame_main.trigger(jQuery.Event('tmsys-taskByApp',{app:event.target.value}));
+        });
+
+        //-gotoURL triggers
+        $jq(".tmsys-btn-gotoURL").on('click',function(event){
+          frame_main.trigger(jQuery.Event('tmsys-gotoURL',{gotoURL:event.target.value}));
         });
       });
-      //- $fljq = jQuery.noConflict();
-      //- var frame_main;
-      //- $fljq(document).ready(function(){
-      //-   //-setup main frame to handle events from left frame buttons
-      //-   //-frame_main = parent.frames['tmsys-frame-main'];
-      //-   frame_main = $fljq('frame[name=tmsys-frame-main]', parent.document);
-      //-   console.dir(frame_main[0]);
-      //-   frame_main.on("tmsys-event-taskfilter", function(event){
-      //-     //-get triggering button
-      //-     var button = event.target;
-      //-     //-extract info from data-tmsys-* attribute
-      //-     var info = button.getAttribute('data-tmsys-filter');
-      //-     //-redirect main frame
-      //-     //-by right, there should be some sort of authorization request here.
-      //-     //-and also possibly some way to refresh the application list if authorization request failed.
-      //-     //-frame_main.location.href = "/tmsys/frame_main?requestapp="+info;
-      //-     frame_main.attr('href', "/tmsys/frame_main?requestapp="+info);
-      //-   });
-      //-   $fljq(".tmsys-btn-taskfilterer").click(function(){
-      //-     frame_main.trigger("tmsys-event-taskfilter");
-      //-   });
-      //- });

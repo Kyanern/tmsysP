@@ -65,8 +65,6 @@ div(class="container")
               hr
               div(class="d-grid gap-2")
                 button(class="btn btn-secondary mb-3" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-task=open.Task_id name="btn_detailsTask" value=open.Task_id)="Details..."
-                //-div(class="col-6")
-                  button(class="btn btn-primary" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-victim=open.Task_id name="btn_detailsTask" value=open.Task_id)="Details..."
               if open.permitOpen
                 form(method="post" action="")
                   div(class="row g-3 align-items-center")
