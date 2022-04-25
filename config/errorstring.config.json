@@ -18,5 +18,6 @@
     "createTaskIDTaken": "Please contact administration. A task with the following ID already exists: ",
     "createTaskRNumCannotIncrement": "Please contact administration. There was an error when trying to increment RNumber of application: ",
     "listTasksNoApps": "No tasks to display. If you are expecting tasks to show up, you may not have permissions for the applications they are associated with.",
-    "userNotLoggedIn": "User not logged in."
+    "userNotLoggedIn": "User not logged in.",
+    "taskActionNotAllowed": "The action you are trying to perform is not allowed. The task's state might have changed. Please refresh and try again."
 }

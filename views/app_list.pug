@@ -100,11 +100,18 @@ html
                         div(class="col-10")
                           input(id=idInputPermitCreateTask type="text" name="app_permitCreateTask" readonly class="form-control-plaintext" value=app.App_permit_createTask)
                       div(class="row g-3 align-items-center")
-                        div(class="col-auto")
-                          button(type="submit" class="btn btn-primary mb-3" name="btn_editThisApplication" value=true)="Edit"
-                        div(class="col-auto")
-                          button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deleteAppModal" data-bs-victim=app.App_Acronym name="btn_deleteThisApp" value=app.App_Acronym)="Delete"
-                include includes/modal_confirmAppDelete.pug
+                        div(class="col-2")
+                          label(for=idInputPermitEditApp class="col-form-label")="'Edit App' granted to:"
+                        div(class="col-10")
+                          input(id=idInputPermitEditApp type="text" name="app_permitEditApp" readonly class="form-control-plaintext" value=app.App_permit_editApp)
+                      if app.canEditApp
+                        div(class="row g-3 align-items-center")
+                          div(class="col-auto")
+                            button(type="submit" class="btn btn-primary mb-3" name="btn_editThisApplication" value=true)="Edit"
+                          div(class="col-auto")
+                            button(class="btn btn-danger mb-3" data-bs-toggle="modal" type="button" data-bs-target="#deleteAppModal" data-bs-victim=app.App_Acronym name="btn_deleteThisApp" value=app.App_Acronym)="Delete"
+                if app.canEditApp
+                  include includes/modal_confirmAppDelete.pug
       if isEditingApplication
         div(class="row")
           a(class="col-auto btn btn-link" href="/applications")="Back to search"
@@ -158,6 +165,11 @@ html
             div(class="col-sm-5")
               input(type="text" name="App_permit_createTask" class="d-none" value=App_permit_createTask readonly)
               input#editeePermitCreateTask(type="text" name="App_permit_createTask_new" class="form-control" value=App_permit_createTask)
+          div(class="mb-3")
+            label(for="editeePermitEditApp" class="col-sm-2 col-form-label")="'Edit App' Permissions:"
+            div(class="col-sm-5")
+              input(type="text" name="App_permit_editApp" class="d-none" value=App_permit_editApp readonly)
+              input#editeePermitEditApp(type="text" name="App_permit_editApp_new" class="form-control" value=App_permit_editApp)
           div(class="mb-3")
             button(type="submit" class="btn btn-primary" name="btn_editApp" value=true)="Edit Application"
         div(class="row")

@@ -80,6 +80,9 @@ module.exports = {
     getDbApplicationSchemaColPermitCreateTask: () => {
         return `${dbConfigs.dbApplicationSchemaColPermitCreateTask}`;
     },
+    getDbApplicationSchemaColPermitEditApp: () => {
+        return `${dbConfigs.dbApplicationSchemaColPermitEditApp}`;
+    },
 
     getDbPlanSchema: () => {
         return `${dbConfigs.dbPlanSchema}`;
@@ -156,10 +159,10 @@ module.exports = {
         return `${dbConfigs.dbLoginSchemaColUsername},${dbConfigs.dbLoginSchemaColPassword},${dbConfigs.dbLoginSchemaColIsActive}`;
     },
     getDbColFormat_CreateApplication: () => {
-        return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColRnumber}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}, ${dbConfigs.dbApplicationSchemaColPermitCreatePlan}, ${dbConfigs.dbApplicationSchemaColPermitCreateTask}`;
+        return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColRnumber}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}, ${dbConfigs.dbApplicationSchemaColPermitCreatePlan}, ${dbConfigs.dbApplicationSchemaColPermitCreateTask}, ${dbConfigs.dbApplicationSchemaColPermitEditApp}`;
     },
     getDbColFormat_ListApplications: () => {
-        return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}, ${dbConfigs.dbApplicationSchemaColPermitCreatePlan}, ${dbConfigs.dbApplicationSchemaColPermitCreateTask}`;
+        return `${dbConfigs.dbApplicationSchemaColAcronym}, ${dbConfigs.dbApplicationSchemaColDescription}, ${dbConfigs.dbApplicationSchemaColDateStart}, ${dbConfigs.dbApplicationSchemaColDateEnd}, ${dbConfigs.dbApplicationSchemaColPermitOpen}, ${dbConfigs.dbApplicationSchemaColPermitToDo}, ${dbConfigs.dbApplicationSchemaColPermitDoing}, ${dbConfigs.dbApplicationSchemaColPermitDone}, ${dbConfigs.dbApplicationSchemaColPermitCreatePlan}, ${dbConfigs.dbApplicationSchemaColPermitCreateTask}, ${dbConfigs.dbApplicationSchemaColPermitEditApp}`;
     },
     getDbColFormat_ListPlans: () => {
         return `${dbConfigs.dbPlanSchemaColMVPName}, ${dbConfigs.dbPlanSchemaColDateStart}, ${dbConfigs.dbPlanSchemaColDateEnd}, ${dbConfigs.dbPlanSchemaColAcronym}`;
@@ -177,6 +180,9 @@ module.exports = {
         //this format retrieves all information of a Task.
         return `${dbConfigs.dbTaskSchemaColName}, ${dbConfigs.dbTaskSchemaColDescription}, ${dbConfigs.dbTaskSchemaColID}, ${dbConfigs.dbTaskSchemaColPlan},  ${dbConfigs.dbTaskSchemaColAcronym}, ${dbConfigs.dbTaskSchemaColState}, ${dbConfigs.dbTaskSchemaColCreator}, ${dbConfigs.dbTaskSchemaColOwner}, ${dbConfigs.dbTaskSchemaColDateCreate}, ${dbConfigs.dbTaskSchemaColNotes}`
     },
+    // getDbColFormat_TaskActionCheck: () => {
+    //     //this format retrieves a task's state and 
+    // },
 
     establishDbConnection: () => {
         props.connection = mysql.createConnection(getDbConnectionString());

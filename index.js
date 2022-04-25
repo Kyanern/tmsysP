@@ -17,7 +17,8 @@ const tasksController = require('./controllers/tasks');
 // Inititalize the app and add middleware
 app.set('view engine', 'pug'); // Setup the pug
 app.use(bodyParser.urlencoded({extended: true})); // Setup the body parser to handle form submits
-app.use(session({secret: 'super-secret'})); // Session setup
+app.use(session({secret: 'super-secret', name:'sessionId'})); // Session setup
+app.disable('x-powered-by');
 
 dbModel.establishDbConnection();
 

@@ -17,7 +17,8 @@ html
       div(class="container")
         div(class="row")="Create:"
         div(class="d-grid gap-1")
-          button#btn_createApp(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/applications/create")="Application"
+          if canAdmin
+            button#btn_createApp(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/applications/create")="Application"
           button#btn_createPlan(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/plans/create")="Plan"
           button#btn_createTask(type="button" class="btn btn-outline-primary tmsys-btn-gotoURL" value="/tasks/create")="Task"
       

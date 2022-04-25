@@ -96,13 +96,14 @@ let renderFrameMain = async (req,res,finalError, finalSuccess) => {
     let qCond4 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitDone()}, '${usergroup}') `;
     let qCond5 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreatePlan()}, '${usergroup}') `;
     let qCond6 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreateTask()}, '${usergroup}') `;
+    let qCond7 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitEditApp()}, '${usergroup}') `;
     let {requestapp} = req.query
-    let qCond7 = `${dbModel.getDbApplicationSchemaColAcronym()} = '${requestapp}'`;
+    let qCond8 = `${dbModel.getDbApplicationSchemaColAcronym()} = '${requestapp}'`;
     //construct query
     let appQuery = qSELECTFROM + qWHERE;
-    appQuery += '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + qOR + qCond5 + qOR + qCond6 + ')';
+    appQuery += '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + qOR + qCond5 + qOR + qCond6 + qOR + qCond7 + ')';
     if(requestapp){
-        appQuery += qAND + qCond7;
+        appQuery += qAND + qCond8;
     }
     //console.log(appQuery);
     let retapp = await dbModel.performQuery(appQuery);
@@ -119,22 +120,22 @@ let renderFrameMain = async (req,res,finalError, finalSuccess) => {
     //then query what tasks this user can see.
     // 2022-04-12: Separate into 5 different queries.
     qSELECTFROM = `SELECT ${dbModel.getDbColFormat_ListTasks()} FROM ${dbModel.getDbTaskSchema()} `;
-    let qCond7a = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumOpen()}' `;
-    let qCond7b = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumToDo()}' `;
-    let qCond7c = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumDoing()}' `;
-    let qCond7d = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumDone()}' `;
-    let qCond7e = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumClosed()}' `;
-    let qCond8 = `REGEXP_LIKE(${dbModel.getDbTaskSchemaColAcronym()},'${acronyms}') `;
+    let qCond9a = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumOpen()}' `;
+    let qCond9b = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumToDo()}' `;
+    let qCond9c = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumDoing()}' `;
+    let qCond9d = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumDone()}' `;
+    let qCond9e = `${dbModel.getDbTaskSchemaColState()} = '${dbModel.getDbTaskSchemaColStateEnumClosed()}' `;
+    let qCond10 = `REGEXP_LIKE(${dbModel.getDbTaskSchemaColAcronym()},'${acronyms}') `;
     // 2022-04-12: doing the queries one by one. slow performance but (probably) easier to debug
-    let taskQuery = qSELECTFROM + qWHERE + qCond7a + qAND + qCond8;
+    let taskQuery = qSELECTFROM + qWHERE + qCond9a + qAND + qCond10;
     let retopen = await dbModel.performQuery(taskQuery);
-    taskQuery = qSELECTFROM + qWHERE + qCond7b + qAND + qCond8;
+    taskQuery = qSELECTFROM + qWHERE + qCond9b + qAND + qCond10;
     let rettodo = await dbModel.performQuery(taskQuery);
-    taskQuery = qSELECTFROM + qWHERE + qCond7c + qAND + qCond8;
+    taskQuery = qSELECTFROM + qWHERE + qCond9c + qAND + qCond10;
     let retdoing = await dbModel.performQuery(taskQuery);
-    taskQuery = qSELECTFROM + qWHERE + qCond7d + qAND + qCond8;
+    taskQuery = qSELECTFROM + qWHERE + qCond9d + qAND + qCond10;
     let retdone = await dbModel.performQuery(taskQuery);
-    taskQuery = qSELECTFROM + qWHERE + qCond7e + qAND + qCond8;
+    taskQuery = qSELECTFROM + qWHERE + qCond9e + qAND + qCond10;
     let retclosed = await dbModel.performQuery(taskQuery);
     // reformat the dates
     let dateReformatter = (rows)=>{
@@ -272,6 +273,75 @@ let renderFrameMain = async (req,res,finalError, finalSuccess) => {
     res.render('tmsys', options);
 }
 
+/***
+ * takes in a task state and a task action and sees whether 
+ * the action performed is valid for the task's state
+ * 
+ * returns a boolean. if true, the action is valid to perform
+ * on the task based on the task's state. false otherwise.
+ */
+let checkStateAction = (state, action) => {
+    /***
+     * By right all these actions should not be hardcoded lol
+     */
+    if(state === dbModel.getDbTaskSchemaColStateEnumOpen()){
+        if(action === "taskAction_Open_ToDo"){
+            return true;
+        }
+    } else if (state === dbModel.getDbTaskSchemaColStateEnumToDo()){
+        if(action === "taskAction_ToDo_Doing"){
+            return true;
+        }
+    } else if (state === dbModel.getDbTaskSchemaColStateEnumDoing()){
+        if(
+            action === "taskAction_Doing_Done"||
+            action === "taskAction_Doing_ToDo"
+        ){
+            return true;
+        }
+    } else if (state === dbModel.getDbTaskSchemaColStateEnumDone()){
+        if(
+            action === "taskAction_Done_Closed"||
+            action === "taskAction_Done_Doing"
+        ){
+            return true;
+        }
+    }
+    //default
+    return false;
+}
+
+let determineFinalState = (action) => {
+    /***
+     * By right all these actions should not be hardcoded lolz
+     */
+    if(
+        action === "taskAction_Open_ToDo"||
+        action === "taskAction_Doing_ToDo"
+    ){
+        return dbModel.getDbTaskSchemaColStateEnumToDo();
+    } 
+    else if (
+        action === "taskAction_ToDo_Doing"||
+        action === "taskAction_Done_Doing"
+    ){
+        return dbModel.getDbTaskSchemaColStateEnumDoing();
+    }
+    else if (
+        action === "taskAction_Doing_Done"
+    ){
+        return dbModel.getDbTaskSchemaColStateEnumDone();
+    }
+    else if (
+        action === "taskAction_Done_Closed"
+    ){
+        return dbModel.getDbTaskSchemaColStateEnumClosed();
+    }
+    else{
+        return -1;
+    }
+}
+
 router.get('/frame_main',
     //GET request for first entry
     async (req,res)=>{
@@ -314,6 +384,69 @@ router.post('/frame_main',
             }
             renderFrameMain(req,res,null,`Application ${createAppAcronym} successfully created`);
         }
+    },
+    //handles btn_taskAction button
+    async(req,res,next)=>{
+        let{btn_taskAction} = req.body;
+        if(!btn_taskAction){
+            next();
+        } else {
+            let {taskAction} = req.body;
+            /***
+             * At this point, we have the following info:
+             * Username from req.session.username
+             * task ID from btn_taskAction
+             * action taken from taskAction
+             */
+
+            /***
+             * By right, we need to do some precheck here to ensure that
+             * user still has correct permissions to take the requested
+             * action.
+             * 
+             * I am skipping this step.
+             * (Supported by assumption: User cannot see/choose actions they
+             *  are not allowed to use, due to UI/UX design)
+             */
+
+            let selQ = `SELECT ${dbModel.getDbTaskSchemaColState()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_taskAction}'`;
+            let retselQ = await dbModel.performQuery(selQ);
+            if(retselQ.error){
+                //console.dir(retselQ.error);
+                renderFrameMain(req,res,errorStr.internalErrorDB);
+                return;
+            }
+            if(retselQ.result.length !== 1){
+                //console.log(btn_taskAction + ': There may be db corruption with this Task ID.');
+                renderFrameMain(req,res,errorStr.internalErrorDB);
+                return;
+            }
+            let state = retselQ.result[0].Task_state;
+            let isValidAction = await checkStateAction(state,taskAction);
+            if(!isValidAction){
+                renderFrameMain(req,res,errorStr.taskActionNotAllowed);
+                return;
+            }
+            let finalState = await determineFinalState(taskAction);
+            if(finalState === -1){
+                renderFrameMain(req,res,errorStr.taskActionNotAllowed);
+                return;
+            }
+
+            /***
+             * I'm lazy to do a "same owner" check here. But it can (should?)
+             * be done here(, if needed?)
+             */
+
+            let updQ = `UPDATE ${dbModel.getDbTaskSchema()} SET ${dbModel.getDbTaskSchemaColState()}='${finalState}',${dbModel.getDbTaskSchemaColOwner()}='${req.session.username}' WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_taskAction}'`;
+            let retupdQ = await dbModel.performQuery(updQ);
+            if(retupdQ.error){
+                //console.dir(retupdQ.error);
+                renderFrameMain(req,res,errorStr.internalErrorDB);
+                return;
+            }
+            renderFrameMain(req,res,null,'Task action successfully performed on Task ' + btn_taskAction);
+        }
     }
 )
 
@@ -347,8 +480,9 @@ router.get('/frame_left',
         let qCond4 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitDone()}, '${usergroup}') `;
         let qCond5 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreatePlan()}, '${usergroup}') `;
         let qCond6 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitCreateTask()}, '${usergroup}') `;
+        let qCond7 = `REGEXP_LIKE(${dbModel.getDbApplicationSchemaColPermitEditApp()}, '${usergroup}') `;
         //construct query
-        let appQuery = qSELECTFROM + qWHERE + '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + qOR + qCond5 + qOR + qCond6 + ')';
+        let appQuery = qSELECTFROM + qWHERE + '(' + qCond1 + qOR + qCond2 + qOR + qCond3 + qOR + qCond4 + qOR + qCond5 + qOR + qCond6 + qOR + qCond7 + ')';
         //console.log(appQuery);
         let retapp = await dbModel.performQuery(appQuery);
         if(retapp.error){

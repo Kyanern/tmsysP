@@ -1,49 +1,5 @@
 div(class="container")
-  //-form(method="get" action="")
-    div(class="row")
-      label(for="select-app" class="col-1 col-form-label")="Application:"
-      div(class="col-2")
-        select(id="select-app" class="form-select" aria-label="Select Application")
-          option(selected value="(all)")="(All)"
-          option(value="1")="One"
-          option(value="2")="Two"
-          option(value="3")="Three"
-      label(for="select-plan" class="col-1 col-form-label")="Plan:"
-      div(class="col-2")
-        select(id="select-plan" class="form-select" aria-label="Select Plan")
-          option(selected value="(all)")="(All)"
-          option(value="1")="One"
-          option(value="2")="Two"
-          option(value="3")="Three"
-      button(type="submit" class="btn btn-primary mb-3 col-1")="Filter"
 
-  //-if specificApplication
-    hr
-    div(class="row")
-      h4(class="pb-2 text-decoration-underline")="Application Details"
-    div(class="row")
-      p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
-    div(class="row")
-      div(class="col-lg-1")="Start Date:"
-      div(class="col-lg-2")="Lorem ipsum"
-      div(class="col-lg-1")="End Date:"
-      div(class="col-lg-2")="Lorem ipsum"
-    div(class="row-lg")
-      button(class="col-lg-2 btn btn-primary" data-bs-toggle="modal" type="button" data-bs-target="#updateAppModal")="Update Application"
-
-  //-if specificPlan
-    hr
-    div(class="row")
-      h4(class="pb-2 text-decoration-underline")="Plan Details"
-    div(class="row")
-      div(class="col-lg-1")="Start Date:"
-      div(class="col-lg-2")="Lorem ipsum"
-      div(class="col-lg-1")="End Date:"
-      div(class="col-lg-2")="Lorem ipsum"
-    div(class="row-lg")
-      button(class="col-lg-2 btn btn-primary" data-bs-toggle="modal" type="button" data-bs-target="#updatePlanModal")="Update Plan"
-
-  //-hr
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="Open"
     if errorOpen
@@ -70,7 +26,7 @@ div(class="container")
                   div(class="row g-3 align-items-center")
                     div(class="col-8")
                       select(class="form-select" aria-label="Select action" name="taskAction")
-                        option(value="taskAction_Open-ToDo")="Move to To-Do"
+                        option(value="taskAction_Open_ToDo")="Move to To-Do"
                     div(class="col-4")
                       button(type="submit" class="btn btn-primary" name="btn_taskAction" value=open.Task_id)="Apply"
             
@@ -89,11 +45,22 @@ div(class="container")
             div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
               div(class="card-header ")=todo.Task_id
               h5(class="card-title ")=todo.Task_name
-              div(class="card-text ")=todo.Task_description
+              div(class="card-text text-truncate")=todo.Task_description
               hr
               div(class="card-text ")="Creator: " + todo.Task_creator
               div(class="card-text ")="Owner: " + todo.Task_owner
               div(class="card-text ")="Date Created: " + todo.Task_createDate
+              hr
+              div(class="d-grid gap-2")
+                button(class="btn btn-secondary mb-3" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-task=todo.Task_id name="btn_detailsTask" value=todo.Task_id)="Details..."
+              if todo.permitToDo
+                form(method="post" action="")
+                  div(class="row g-3 align-items-center")
+                    div(class="col-8")
+                      select(class="form-select" aria-label="Select action" name="taskAction")
+                        option(value="taskAction_ToDo_Doing")="Move to Doing"
+                    div(class="col-4")
+                      button(type="submit" class="btn btn-primary" name="btn_taskAction" value=todo.Task_id)="Apply"
 
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="Doing"
@@ -106,9 +73,25 @@ div(class="container")
         if tasksDoing
           for doing in tasksDoing
             div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              div(class="card-header ")="Task ID"
-              h5(class="card-title ")="Card title"
-              p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
+              div(class="card-header ")=doing.Task_id
+              h5(class="card-title ")=doing.Task_name
+              div(class="card-text text-truncate")=doing.Task_description
+              hr
+              div(class="card-text ")="Creator: " + doing.Task_creator
+              div(class="card-text ")="Owner: " + doing.Task_owner
+              div(class="card-text ")="Date Created: " + doing.Task_createDate
+              hr
+              div(class="d-grid gap-2")
+                button(class="btn btn-secondary mb-3" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-task=doing.Task_id name="btn_detailsTask" value=doing.Task_id)="Details..."
+              if doing.permitDoing
+                form(method="post" action="")
+                  div(class="row g-3 align-items-center")
+                    div(class="col-8")
+                      select(class="form-select" aria-label="Select action" name="taskAction")
+                        option(value="taskAction_Doing_Done")="Move to Done"
+                        option(value="taskAction_Doing_ToDo")="Move to To-Do"
+                    div(class="col-4")
+                      button(type="submit" class="btn btn-primary" name="btn_taskAction" value=doing.Task_id)="Apply"
 
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="Done"
@@ -121,9 +104,25 @@ div(class="container")
         if tasksDone
           for done in tasksDone
             div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              div(class="card-header ")="Task ID"
-              h5(class="card-title ")="Card title"
-              p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
+              div(class="card-header ")=done.Task_id
+              h5(class="card-title ")=done.Task_name
+              div(class="card-text text-truncate")=done.Task_description
+              hr
+              div(class="card-text ")="Creator: " + done.Task_creator
+              div(class="card-text ")="Owner: " + done.Task_owner
+              div(class="card-text ")="Date Created: " + done.Task_createDate
+              hr
+              div(class="d-grid gap-2")
+                button(class="btn btn-secondary mb-3" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-task=done.Task_id name="btn_detailsTask" value=done.Task_id)="Details..."
+              if done.permitDone
+                form(method="post" action="")
+                  div(class="row g-3 align-items-center")
+                    div(class="col-8")
+                      select(class="form-select" aria-label="Select action" name="taskAction")
+                        option(value="taskAction_Done_Closed")="Move to Closed"
+                        option(value="taskAction_Done_Doing")="Move to Doing"
+                    div(class="col-4")
+                      button(type="submit" class="btn btn-primary" name="btn_taskAction" value=done.Task_id)="Apply"
 
   div(class="container-fluid py-2")
     h4(class="pb-2 text-decoration-underline")="Closed"
@@ -136,6 +135,13 @@ div(class="container")
         if tasksClosed
           for closed in tasksClosed
             div(class="card card-body" style="max-width: 300px;min-width: 300px;min-height: 100px;margin-right: 5px;")
-              div(class="card-header ")="Task ID"
-              h5(class="card-title ")="Card title"
-              p(class="card-text ") Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam ante neque, varius eget sodales eu, sollicitudin ac mi. Fusce mattis.
+              div(class="card-header ")=closed.Task_id
+              h5(class="card-title ")=closed.Task_name
+              div(class="card-text text-truncate")=closed.Task_description
+              hr
+              div(class="card-text ")="Creator: " + closed.Task_creator
+              div(class="card-text ")="Owner: " + closed.Task_owner
+              div(class="card-text ")="Date Created: " + closed.Task_createDate
+              hr
+              div(class="d-grid gap-2")
+                button(class="btn btn-secondary mb-3" data-bs-toggle="modal" type="button" data-bs-target="#detailsTaskModal" data-bs-task=closed.Task_id name="btn_detailsTask" value=closed.Task_id)="Details..."

@@ -75,6 +75,7 @@ let renderAppList = async (req, res, finalError, finalSuccess) => {
       //for determining whether we should display the 'create' buttons
       rows[i].canCreatePlan = usergroupRX.test(rows[i].App_permit_createPlan);
       rows[i].canCreateTask = usergroupRX.test(rows[i].App_permit_createTask);
+      rows[i].canEditApp = usergroupRX.test(rows[i].App_permit_editApp);
   }
   // console.dir(rows);
 
@@ -117,7 +118,7 @@ router.post('/',
       next();
     } else{
       let {app_acronym,app_description,app_startDate,app_endDate} = req.body;
-      let {app_permitOpen,app_permitToDo,app_permitDoing,app_permitDone, app_permitCreatePlan, app_permitCreateTask} = req.body;
+      let {app_permitOpen,app_permitToDo,app_permitDoing,app_permitDone, app_permitCreatePlan, app_permitCreateTask, app_permitEditApp} = req.body;
       let options = {
         isLoggedIn : req.session.isLoggedIn,
         isEditingApplication: true,
@@ -130,7 +131,8 @@ router.post('/',
         App_permit_Doing: app_permitDoing,
         App_permit_Done: app_permitDone,
         App_permit_createPlan: app_permitCreatePlan,
-        App_permit_createTask: app_permitCreateTask
+        App_permit_createTask: app_permitCreateTask,
+        App_permit_editApp: app_permitEditApp
       }
       res.render('app_list',options);
     }
@@ -142,9 +144,9 @@ router.post('/',
       next();
     } else{
       let {App_Acronym, App_Description, App_startDate, App_endDate} = req.body;
-      let {App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done, App_permit_createPlan, App_permit_createTask} = req.body;
+      let {App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done, App_permit_createPlan, App_permit_createTask, App_permit_editApp} = req.body;
       let {App_Description_new, App_startDate_new, App_endDate_new} = req.body;
-      let {App_permit_Open_new, App_permit_toDoList_new, App_permit_Doing_new, App_permit_Done_new, App_permit_createPlan_new, App_permit_createTask_new} = req.body;
+      let {App_permit_Open_new, App_permit_toDoList_new, App_permit_Doing_new, App_permit_Done_new, App_permit_createPlan_new, App_permit_createTask_new, App_permit_editApp_new} = req.body;
 
       //these references will be used when the mySQL query is successful
       let disp_Description = App_Description;
@@ -156,6 +158,7 @@ router.post('/',
       let disp_permit_Done = App_permit_Done;
       let disp_permit_createPlan = App_permit_createPlan;
       let disp_permit_createTask = App_permit_createTask;
+      let disp_permit_editApp = App_permit_editApp;
       //prepare query construction,
       //verify information and append to query,
       //send query if all ok
@@ -207,6 +210,11 @@ router.post('/',
         disp_permit_createTask = App_permit_createTask_new;
         //console.log("pushed new permit_createTask into stack");
       }
+      if(App_permit_editApp !== App_permit_editApp_new){
+        myStack.push(`${dbModel.getDbApplicationSchemaColPermitEditApp()}='${App_permit_editApp_new}'`);
+        disp_permit_editApp = App_permit_editApp_new;
+        //console.log("pushed new permit_editApp into stack");
+      }
 
       if(!myStack.length){
         let options = {
@@ -222,6 +230,7 @@ router.post('/',
           App_permit_Done: App_permit_Done,
           App_permit_createPlan: App_permit_createPlan,
           App_permit_createTask: App_permit_createTask,
+          App_permit_editApp: App_permit_editApp,
           error: errorStr.nothingToModify
         }
         res.render('app_list',options);
@@ -254,6 +263,7 @@ router.post('/',
           App_permit_Done: App_permit_Done,
           App_permit_createPlan: App_permit_createPlan,
           App_permit_createTask: App_permit_createTask,
+          App_permit_editApp: App_permit_editApp,
           error: errorStr.internalErrorDB
         }
         res.render('app_list',options);
@@ -272,6 +282,7 @@ router.post('/',
         App_permit_Done: disp_permit_Done,
         App_permit_createPlan: disp_permit_createPlan,
         App_permit_createTask: disp_permit_createTask,
+        App_permit_editApp: disp_permit_editApp,
         success: `'${App_Acronym}' successfully updated.`
       }
       res.render('app_list',options);
@@ -315,10 +326,10 @@ router.post('/create',
             next();
         } else {
             let {createAppAcronym, createAppNumber, createAppDescription, createAppDateStart, createAppDateEnd} = req.body;
-            let {createAppPermitOpen, createAppPermitToDo, createAppPermitDoing, createAppPermitDone, createAppPermitCreatePlan, createAppPermitCreateTask} = req.body;
+            let {createAppPermitOpen, createAppPermitToDo, createAppPermitDoing, createAppPermitDone, createAppPermitCreatePlan, createAppPermitCreateTask, createAppPermitEditApp} = req.body;
 
             let myQuery = `INSERT INTO ${dbModel.getDbApplicationSchema()}(${dbModel.getDbColFormat_CreateApplication()})`;
-            myQuery += ` VALUES('${createAppAcronym}', '${createAppNumber}', '${createAppDescription}','${createAppDateStart}','${createAppDateEnd}','${createAppPermitOpen}','${createAppPermitToDo}','${createAppPermitDoing}','${createAppPermitDone}','${createAppPermitCreatePlan}','${createAppPermitCreateTask}')`;
+            myQuery += ` VALUES('${createAppAcronym}', '${createAppNumber}', '${createAppDescription}','${createAppDateStart}','${createAppDateEnd}','${createAppPermitOpen}','${createAppPermitToDo}','${createAppPermitDoing}','${createAppPermitDone}','${createAppPermitCreatePlan}','${createAppPermitCreateTask}','${createAppPermitEditApp}')`;
             let retQ = await dbModel.performQuery(myQuery);
             let error= retQ.error;
             if(error){

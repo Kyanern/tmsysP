@@ -24,6 +24,7 @@
     "dbApplicationSchemaColPermitDone": "`App_permit_Done`",
     "dbApplicationSchemaColPermitCreatePlan": "`App_permit_createPlan`",
     "dbApplicationSchemaColPermitCreateTask": "`App_permit_createTask`",
+    "dbApplicationSchemaColPermitEditApp": "`App_permit_editApp`",
     "dbPlanSchema": "nodelogin.plan",
     "dbPlanSchemaColMVPName": "`Plan_MVP_name`",
     "dbPlanSchemaColDateStart": "`Plan_startDate`",

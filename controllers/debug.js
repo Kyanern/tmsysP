@@ -28,17 +28,18 @@ router.get('/',
                 // res.send(toSend);
 
                 // res.render('debug', {success: 'btn_AJAXPerformSelectQuery!'}); // WILL FAIL because client expects a JSON object
-                let query = 'SELECT DATE(`dates`) AS \'date\' FROM sandbox.dates;';
+                // let query = 'SELECT DATE(`dates`) AS \'date\' FROM sandbox.dates;';
+                let query = `SELECT ${dbModel.getDbTaskSchemaColState()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = 'premade_5'`;
                 let retq;
                 try {
                     retq = await dbModel.performQuery(query);
-                    let rows = retq.result;
-                    for(let i = 0; i < rows.length; i++){
-                        // console.log(typeof rows[i].date);
-                        // console.log(rows[i].date);
-                        // console.log(rows[i].date.toDateString());
-                        rows[i].date = (rows[i].date.toISOString().split('T'))[0];
-                    }
+                    // let rows = retq.result;
+                    // for(let i = 0; i < rows.length; i++){
+                    //     // console.log(typeof rows[i].date);
+                    //     // console.log(rows[i].date);
+                    //     // console.log(rows[i].date.toDateString());
+                    //     rows[i].date = (rows[i].date.toISOString().split('T'))[0];
+                    // }
                 } catch (error) {
                     console.dir(error);
                 } finally {

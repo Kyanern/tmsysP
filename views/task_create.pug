@@ -21,19 +21,21 @@ html
         div(class="col")
           a(class="btn btn-link" href="/tmsys/frame_main")="Back to menu"
       hr
-
-      form(method="post" action="")
-        label(for="taskAppAcronym" class="col-2 col-form-label")="For Application:"
-        select#taskAppAcronym(class="form-select" aria-label="Select application" name="Task_app_Acronym")
-          for a in appList
-            option(value=a.App_Acronym)=a.App_Acronym
-        label(for="taskPlan" class="col-2 col-form-label")="For Plan:"
-        select#taskPlan(class="form-select" aria-label="Select plan" name="Task_plan")
-        label(for="taskName" class="form-label")="Task Name"
-        input#taskName(type="text" name="Task_name" class="form-control" )
-        label(for="taskDescription" class="form-label")="Task Description:"
-        textarea#taskDescription(rows="6" name="Task_description" class="form-control" )
-        button(type="submit" class="btn btn-primary" name="btn_createTask" value=true)="Create Task"
+      
+      unless disallowed
+        form(method="post" action="")
+          label(for="taskAppAcronym" class="col-2 col-form-label")="For Application:"
+          select#taskAppAcronym(class="form-select" aria-label="Select application" name="Task_app_Acronym")
+            if appList
+              for a in appList
+                option(value=a.App_Acronym)=a.App_Acronym
+          label(for="taskPlan" class="col-2 col-form-label")="For Plan:"
+          select#taskPlan(class="form-select" aria-label="Select plan" name="Task_plan")
+          label(for="taskName" class="form-label")="Task Name"
+          input#taskName(type="text" name="Task_name" class="form-control" )
+          label(for="taskDescription" class="form-label")="Task Description:"
+          textarea#taskDescription(rows="6" name="Task_description" class="form-control" )
+          button(type="submit" class="btn btn-primary" name="btn_createTask" value=true)="Create Task"
 
     script
       include includes/task_create.js

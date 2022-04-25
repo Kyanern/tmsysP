@@ -98,7 +98,9 @@ router.get('/useredit', async (req,res)=>{
         isLoggedIn: req.session.isLoggedIn, 
         canAdmin: req.body.isAdmin, 
         isSearching: true, 
-        usernameList: rows});
+        usernameList: rows,
+        
+    });
 });
 
 router.post('/useredit', 
