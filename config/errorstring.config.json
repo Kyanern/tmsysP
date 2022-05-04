@@ -21,5 +21,6 @@
     "listTasksNoApps": "No tasks to display. If you are expecting tasks to show up, you may not have permissions for the applications they are associated with.",
     "userNotLoggedIn": "User not logged in.",
     "taskActionNotAllowed": "The action you are trying to perform is not allowed. The task's state might have changed. Please refresh and try again.",
-    "APIUnknownTaskState": "Unknown task state specified. Please refer to 'data' for a list of valid task states."
+    "APIUnknownTaskState": "Unknown task state specified. Please refer to 'data' for a list of valid task states.",
+    "APIHTTPMethodNotAllowed": "The HTTP Method used by your request is not compatible with this URL. Please refer to 'data' for compatible HTTP Method(s)."
 }

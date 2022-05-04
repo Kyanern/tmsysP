@@ -5,8 +5,16 @@ const dbModel = require('../../../models/db');
 const errorStr = require('../../../config/errorstring.config.json');
 const helperModel = require('../../../models/helperfuncs');
 const APIAuthModel = require('../../../models/apiauth');
+
 /***
- * Process task list request function:
+ * REQUESTS FOR RETRIEVING TASKS (OPTIONALLY WITH 'STATE' FILTER)
+ * 
+ * Note that user still only sees tasks that user has application permissions for.
+ */
+
+/***
+ * Process task list request function
+ * 
  * A function to process a task list request.
  * 
  * 2022-04-28:
@@ -140,7 +148,7 @@ let tasklistReqProcess = async(req,res,next)=>{
 router.all('/', APIAuthModel.authPreprocess, APIAuthModel.authBasic);
 
 /***
- * /api/v1/tasks[?state=<state>]
+ * GET /api/v1/tasks[?state=<state>]
  * 
  * API GET request to retrieve list of tasks.
  * Optionally, a query prop 'state' can be supplied
@@ -161,14 +169,13 @@ router.get('/',
 );
 
 /***
- * /api/v1/tasks
+ * POST /api/v1/tasks
  * 
  * API POST request to retrieve list of tasks.
  * Optionally, a body prop 'state' can be supplied
  * to retrieve only tasks in a certain state.
  * 
  */
-
 router.post('/',
   async(req,res,next)=>{
     console.log('hit: api/v1/tasks POST');
@@ -182,5 +189,31 @@ router.post('/',
   },
   tasklistReqProcess
 );
+
+/***
+ * REQUESTS FOR CREATING A NEW TASK
+ */
+
+/***
+ * GET /api/v1/tasks/create
+ * 
+ * We recognize the GET request but refuse to process the request.
+ */
+
+router.get('/create',
+  (req,res)=>{
+    console.log('hit: api/v1/tasks/create GET');
+    res.status(405).send({message:errorStr.APIHTTPMethodNotAllowed, data:["POST"]});
+    return;
+  }
+);
+
+/***
+ * POST /api/v1/tasks/create
+ * 
+ * API POST request to create a new task.
+ * This API should tell user how to use it,
+ * in case of missing or malformed body.
+ */
 
 module.exports = router;

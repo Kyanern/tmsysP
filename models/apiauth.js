@@ -39,8 +39,8 @@ const argon2Model = require('./argon2');
         
         // check for basic auth header
         if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
-        return res.status(401).send({ message: 'Missing Authorization Header', data:null });
-        //next(); //see (1)
+            return res.status(401).send({ message: 'Missing Authorization Header', data:null });
+            //next(); //see (1)
         }
 
         // verify auth credentials
