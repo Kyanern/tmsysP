@@ -8,6 +8,7 @@
     "internalErrorArgon2": "An Internal Error occurred. (argon2)",
     "passwordOldWrong": "Old Password is incorrect.",
     "internalErrorWebsite": "An Internal Error occurred. (Website)",
+    "internalErrorGeneric": "An Internal Error occurred.",
     "nothingToModify": "There is nothing to modify.",
     "deleteAppFailed": "Delete Application operation failed. Please ensure selected application does not have any plans and/or tasks referring to it.",
     "createPlanNoPermits": "You are not permitted to create plans for any existing application.",

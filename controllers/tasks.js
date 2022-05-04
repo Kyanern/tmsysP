@@ -314,15 +314,19 @@ router.post('/edit',
         if(retnotes.result){
           arr = JSON.parse(retnotes.result[0].Task_notes);
           
-        } else {
-          arr = new Array();
-        }
-        arr.unshift({
+        } 
+        let noteObj = new Object({
           user:req.session.username,
           taskState:state,
           content:noteNew,
           datetime:(new Date()).toISOString()
         });
+        if(arr){
+          arr.unshift(noteObj);
+        } else {
+          arr = [noteObj];
+        }
+        
         arr = JSON.stringify(arr);
         myStack.push(`${dbModel.getDbTaskSchemaColNotes()}`+'='+dbModel.giveEscaped(arr));
         //console.log('pushed new task note(s) to stack')

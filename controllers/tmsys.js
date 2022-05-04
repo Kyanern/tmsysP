@@ -445,6 +445,35 @@ router.post('/frame_main',
                 renderFrameMain(req,res,errorStr.internalErrorDB);
                 return;
             }
+
+            /***
+             * Now I update the notes with a system-generated note that says who moved the ticket to its final state.
+             * I could probably prepare this part before updQ above but eh, doesn't really matter for now.
+             * I'll reuse the variables.
+             * 
+             * I'm skipping some checks and stuff but by right these should be done.
+             * Also, by right the user should be an actually-existing user.
+             */
+            selQ = `SELECT ${dbModel.getDbTaskSchemaColNotes()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_taskAction}'`;
+            retselQ = await dbModel.performQuery(selQ);
+            let arr; 
+            if(retselQ.result){
+                arr = JSON.parse(retselQ.result[0].Task_notes);
+            }
+            let sysNote = {
+                user:"TMSYSADMIN",
+                taskState:finalState, 
+                content:"User " + req.session.username + " changed this task's state from [" + state + "] to [" + finalState + "]",
+                datetime:(new Date()).toISOString()
+            }
+            if(arr){
+                arr.unshift(sysNote);
+            } else{
+                arr = [sysNote];
+            }
+            arr = JSON.stringify(arr);
+            updQ = `UPDATE ${dbModel.getDbTaskSchema()} SET ${dbModel.getDbTaskSchemaColNotes()}`+'='+dbModel.giveEscaped(arr) + ` WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_taskAction}'`;
+            retupdQ = await dbModel.performQuery(updQ); 
             renderFrameMain(req,res,null,'Task action successfully performed on Task ' + btn_taskAction);
         }
     }
