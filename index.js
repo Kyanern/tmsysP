@@ -13,10 +13,12 @@ const logoutController = require('./controllers/logout');
 const applicationsController = require('./controllers/applications');
 const plansController = require('./controllers/plans');
 const tasksController = require('./controllers/tasks');
+const APIController = require('./controllers/api/api');
 
 // Inititalize the app and add middleware
 app.set('view engine', 'pug'); // Setup the pug
-app.use(bodyParser.urlencoded({extended: true})); // Setup the body parser to handle form submits
+app.use(bodyParser.json()); //Setup the body parser to handle json data (Content-Type = application/json)
+app.use(bodyParser.urlencoded({extended: true})); // Setup the body parser to handle form submits (x-www-form-urlencoded)
 app.use(session({secret: 'super-secret', name:'sessionId'})); // Session setup
 app.disable('x-powered-by');
 
@@ -31,6 +33,7 @@ app.use('/logout',logoutController);
 app.use('/applications', applicationsController);
 app.use('/plans', plansController);
 app.use('/tasks', tasksController);
+app.use('/api', APIController);
 
 app.get('/', (req, res) => {
   if(req.session.isLoggedIn){

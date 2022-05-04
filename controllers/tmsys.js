@@ -149,6 +149,7 @@ let renderFrameMain = async (req,res,finalError, finalSuccess) => {
     dateReformatter(retdoing.result);
     dateReformatter(retdone.result);
     dateReformatter(retclosed.result);
+    // the following session affects the frontend display:
     // we still have app permissions data.
     // let's build a dataset matching this specific user's permissions
     let userperms = new Object();
