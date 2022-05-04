@@ -103,6 +103,7 @@ let tasklistReqProcess = async(req,res,next)=>{
         dbModel.getDbTaskSchemaColStateEnumDone(),
         dbModel.getDbTaskSchemaColStateEnumClosed()
       ]});
+      return;
     }
   }
   let rettasks = await dbModel.performQuery(taskQuery);
