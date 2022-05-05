@@ -191,7 +191,7 @@ router.post('/create',
     ** Task_description
     ** Task_notes       (1)
     ** Task_id          (2)
-    ** Task_plan        (3)
+    ** Task_plan        
     ** Task_app_Acronym
     ** Task_state       (4)
     ** Task_creator     (5)
@@ -200,7 +200,6 @@ router.post('/create',
     **
     ** (1) - Not supplied by user. Will INSERT as NULL first.
     ** (2) - To be handled by server. <app_acronym>_<app_rnumber>.
-    ** (3) - Supposed to be supplied by user, but is a TODO for now and currently not implemented (2022-04-11)
     ** (4) - Using default value defined in database table
     ** (5) - To be handled by server. <req.session.username>
     */

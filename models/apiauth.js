@@ -25,6 +25,7 @@ const argon2Model = require('./argon2');
      */
     authBasic: async(req,res,next)=>{
         console.log("hit: authBasic.");
+        //console.dir(req.headers);
         /***
          * (1) FUTURE: 
          * if there are other authorization methods we allow in the future,

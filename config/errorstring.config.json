@@ -22,5 +22,9 @@
     "userNotLoggedIn": "User not logged in.",
     "taskActionNotAllowed": "The action you are trying to perform is not allowed. The task's state might have changed. Please refresh and try again.",
     "APIUnknownTaskState": "Unknown task state specified. Please refer to 'data' for a list of valid task states.",
-    "APIHTTPMethodNotAllowed": "The HTTP Method used by your request is not compatible with this URL. Please refer to 'data' for compatible HTTP Method(s)."
+    "APIHTTPMethodNotAllowed": "The HTTP Method used by your request is not compatible with this URL. Please refer to 'data' for compatible HTTP Method(s).",
+    "APIMissingParameters": "Your API call is missing some or all parameters. Please refer to 'data' for a list of parameters and their descriptions.",
+    "APIUnknownApplication": "Specified application does not exist.",
+    "APICreateTaskNoPermit": "You are not permitted to create tasks for the specified application referred to in 'data'.",
+    "APITaskNotExist": "Task does not exist."
 }
