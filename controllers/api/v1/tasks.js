@@ -5,6 +5,8 @@ const dbModel = require('../../../models/db');
 const errorStr = require('../../../config/errorstring.config.json');
 const helperModel = require('../../../models/helperfuncs');
 const APIAuthModel = require('../../../models/apiauth');
+const workflowModel = require('../../../models/workflow');
+const workflow = require('../../../models/workflow');
 
 /***
  * Authorization middleware, to be used in all /api/v1/* routes/methods
@@ -375,11 +377,84 @@ router.post('/promote',
       res.status(500).send({message:errorStr.internalErrorDB,data:null});
       return;
     }
+    let taskCurrentState = rettask.result[0].Task_state;
+
+    //check if promotion to specified state is valid
+    if(!workflowModel.checkValidTaskPromotion(taskCurrentState, tostate)){
+      res.status(409).send({message:errorStr.APITaskCannotPromoteToState,data:[
+        taskCurrentState,
+        workflowModel.getValidTaskPromotions(taskCurrentState)
+      ]});
+      return;
+    }
 
     // check if user has permission(s)
+    // query what usergroups this user belongs to.
+    let grpQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsergroup()} FROM ${dbModel.getDbUsergroupsSchema()} WHERE ${dbModel.getDbUsergroupsSchemaColUsername()} = '${req.data.username}'`;
+    let retgrp = await dbModel.performQuery(grpQuery);
+    if(retgrp.error){
+      res.status(500).send({message:errorStr.internalErrorDB,data:null});
+      return;
+    }
+    if(retgrp.result.length > 1){
+      //console.dir("retgrp.result.length: potential database error at usergroup");
+      res.status(500).send({message:errorStr.internalErrorDB,data:null});
+      return;
+    }
+    let usergroup = helperModel.regexfy_usergroup(retgrp.result[0].usergroup);
+    usergroup = new RegExp(usergroup);
     // use task's current state to help determine.
-    let checkWhichPerm = null;
+    let taskAppAcronym = rettask.result[0].Task_app_Acronym;
+    let checkThisPerm = dbModel.mapTaskStatesToAppPerms(taskCurrentState);
+    let permQuery = `SELECT ${checkThisPerm} FROM ${dbModel.getDbApplicationSchema()} WHERE ${dbModel.getDbApplicationSchemaColAcronym()} = '${taskAppAcronym}'`;
+    let retperm = await dbModel.performQuery(permQuery);
+    if(retperm.error){
+      res.status(500).send({message:errorStr.internalErrorDB,data:null});
+      return;
+    }
+    if(retperm.result.length !== 1){
+      res.status(500).send({message:errorStr.internalErrorDB,data:null});
+      return;
+    }
+
+    checkThisPerm = helperModel.stringRemoveBackticks(checkThisPerm);
+    if(!usergroup.test(retperm.result[0][checkThisPerm])){
+      res.status(403).send({message:errorStr.APIPromoteTaskNoPermit, data:[taskCurrentState,tostate]});
+      return;
+    }
+
+    //task exists, promotion path is valid, user has permissions.
+    //promote the task.
+    let updQ = `UPDATE ${dbModel.getDbTaskSchema()} SET ${dbModel.getDbTaskSchemaColState()}='${tostate}',${dbModel.getDbTaskSchemaColOwner()}='${req.data.username}' WHERE ${dbModel.getDbTaskSchemaColID()} = '${taskid}'`;
+    let retupdQ = await dbModel.performQuery(updQ);
+    if(retupdQ.error){
+      res.status(500).send({message:errorStr.internalErrorDB,data:null});
+      return;
+    }
+
+    //insert system-generated note
+    selQ = `SELECT ${dbModel.getDbTaskSchemaColNotes()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${taskid}'`;
+    retselQ = await dbModel.performQuery(selQ);
+    let arr; 
+    if(retselQ.result){
+        arr = JSON.parse(retselQ.result[0].Task_notes);
+    }
+    let sysNote = {
+        user:"TMSYSADMIN",
+        taskState:tostate, 
+        content:"User " + req.data.username + " changed this task's state from [" + taskCurrentState + "] to [" + tostate + "]",
+        datetime:(new Date()).toISOString()
+    }
+    if(arr){
+        arr.unshift(sysNote);
+    } else{
+        arr = [sysNote];
+    }
+    arr = JSON.stringify(arr);
+    updQ = `UPDATE ${dbModel.getDbTaskSchema()} SET ${dbModel.getDbTaskSchemaColNotes()}`+'='+dbModel.giveEscaped(arr) + ` WHERE ${dbModel.getDbTaskSchemaColID()} = '${taskid}'`;
+    retupdQ = await dbModel.performQuery(updQ); 
     
+    res.status(200).send({message:"Task <"+taskid+"> successfully promoted.",data:[sysNote.content]});
   }
 );
 

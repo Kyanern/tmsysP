@@ -26,5 +26,7 @@
     "APIMissingParameters": "Your API call is missing some or all parameters. Please refer to 'data' for a list of parameters and their descriptions.",
     "APIUnknownApplication": "Specified application does not exist.",
     "APICreateTaskNoPermit": "You are not permitted to create tasks for the specified application referred to in 'data'.",
-    "APITaskNotExist": "Task does not exist."
+    "APITaskNotExist": "Task does not exist.",
+    "APITaskCannotPromoteToState": "Task cannot promote to specified state. Please refer to 'data' for task current state and list of states it can promote to.",
+    "APIPromoteTaskNoPermit": "You are not permitted to promote this task from the specified 'from' state to the specified 'to' state."
 }

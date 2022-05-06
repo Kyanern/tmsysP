@@ -57,5 +57,24 @@ module.exports = {
    */
   getDateFromDateObject: (obj) => {
     return (obj.toISOString().split('T'))[0];
+  },
+
+  /***
+   * Takes in an Object and returns a copy of it, but with the key:value pairs inverted.
+   * https://stackoverflow.com/a/23013726
+   */
+  getObjectCopyKeyValueInverted: (obj)=>{
+    return Object.keys(obj).reduce((ret, key) => {
+      ret[obj[key]] = key;
+      return ret;
+    }, {});
+  },
+
+  /***
+   * Takes in a string and removes backticks (`) from the string.
+   */
+  stringRemoveBackticks: (string)=>{
+    string = string.replaceAll('`','');
+    return string;
   }
 }

@@ -2,11 +2,19 @@ const dbConfigs = require('../config/db.config.json');
 const mysql = require('mysql');
 require('mysql/lib/protocol/SqlString');
 const util = require('util');
+const helperModel = require('./helperfuncs');
 
 /** do not export these */
 let getDbConnectionString = () => {
     return `mysql://${dbConfigs.dbUser}:${dbConfigs.dbPass}@${dbConfigs.dbHost}:${dbConfigs.dbPort}/`;
 }
+
+let mapTaskStatesToAppPerms = new Object();
+mapTaskStatesToAppPerms[dbConfigs.dbTaskSchemaColStateEnumOpen] = dbConfigs.dbApplicationSchemaColPermitOpen;
+mapTaskStatesToAppPerms[dbConfigs.dbTaskSchemaColStateEnumToDo] = dbConfigs.dbApplicationSchemaColPermitToDo;
+mapTaskStatesToAppPerms[dbConfigs.dbTaskSchemaColStateEnumDoing] = dbConfigs.dbApplicationSchemaColPermitDoing;
+mapTaskStatesToAppPerms[dbConfigs.dbTaskSchemaColStateEnumDone] = dbConfigs.dbApplicationSchemaColPermitDone;
+//let mapAppPermsToTaskStates = helperModel.getObjectCopyKeyValueInverted(mapTaskStatesToAppPerms);
 /** end of do not export these */
 
 let props = {connection:null, query:null}
@@ -195,6 +203,12 @@ module.exports = {
             try{
                 props.query = util.promisify(props.connection.query).bind(props.connection);
                 console.log('promisify query done');
+                // console.log('generating [task state, app permits] mapping...');
+                // console.log('-*******-');
+                // console.dir(mapTaskStatesToAppPerms);
+                // console.log('-*******-');
+                // console.dir(mapAppPermsToTaskStates);
+                // console.log('-*******-');
             } catch(e){
                 console.error('error promisifying query: ' + e);
                 return ({error: e});
@@ -214,5 +228,13 @@ module.exports = {
 
     giveEscaped: (string) => {
         return mysql.escape(string);
-    }
+    },
+
+    mapTaskStatesToAppPerms: (taskState)=>{
+        return mapTaskStatesToAppPerms[taskState];
+    },
+
+    // mapAppPermsToTaskState:  (appPerm)=>{
+    //     return mapAppPermsToTaskStates[appPerm];
+    // }
 }
