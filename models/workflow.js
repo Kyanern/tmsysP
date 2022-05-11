@@ -23,6 +23,7 @@ module.exports = {
     let isToState = (element)=>{
       return element === toState;
     };
+    //example: mapValidTaskPromotions['open'] will return ['todo'];
     if(mapValidTaskPromotions[fromState].findIndex(isToState) !== -1){
       return true;
     } else {

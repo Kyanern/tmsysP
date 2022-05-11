@@ -4,7 +4,8 @@ const checksModel = require('../models/checks');
 const dbModel = require('../models/db');
 const errorStr = require('../config/errorstring.config.json');
 const commonStr = require('../config/commonstring.config.json');
-const helperModel = require('../models/helperfuncs')
+const helperModel = require('../models/helperfuncs');
+const emailModel = require('../models/email');
 
 // middleware that is specific to this router
 router.use(async (req, res, next) => {
@@ -406,8 +407,6 @@ router.post('/frame_main',
              * action.
              * 
              * I am skipping this step.
-             * (Supported by assumption: User cannot see/choose actions they
-             *  are not allowed to use, due to UI/UX design)
              */
 
             let selQ = `SELECT ${dbModel.getDbTaskSchemaColState()} FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_taskAction}'`;
@@ -475,6 +474,121 @@ router.post('/frame_main',
             arr = JSON.stringify(arr);
             updQ = `UPDATE ${dbModel.getDbTaskSchema()} SET ${dbModel.getDbTaskSchemaColNotes()}`+'='+dbModel.giveEscaped(arr) + ` WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_taskAction}'`;
             retupdQ = await dbModel.performQuery(updQ); 
+
+            /***
+             * If the action is to move a task from [doing] state to [done] state,
+             * send an email to the project leads
+             * (for this project, this means any user that is in a usergroup that is
+             * listed under App_permit_Done)
+             */
+            //send email to notify people with 'done' permission
+            //first get what groups have that permission for the application.
+            if(finalState === dbModel.getDbTaskSchemaColStateEnumDone()){
+                selQ = `SELECT ${dbModel.getDbTaskSchemaColAcronym()} AS 'acronym' FROM ${dbModel.getDbTaskSchema()} WHERE ${dbModel.getDbTaskSchemaColID()} = '${btn_taskAction}'`;
+                retselQ = await dbModel.performQuery(selQ);
+                if(retselQ.error){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: selQ error');
+                    return;
+                }
+                if(!retselQ.result || !retselQ.result.length){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: selQ no result');
+                    return;
+                }
+                let taskAppAcronym = retselQ.result[0].acronym;
+                let doneQuery = `SELECT ${dbModel.getDbApplicationSchemaColPermitDone()} AS 'donepermit' FROM ${dbModel.getDbApplicationSchema()} WHERE ${dbModel.getDbApplicationSchemaColAcronym()} = '${taskAppAcronym}'`;
+                let retdone = await dbModel.performQuery(doneQuery);
+                if(retdone.error){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: doneQuery error');
+                    return;
+                }
+                if(!retdone.result || !retdone.result.length){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: doneQuery no result');
+                    return;
+                }
+                let donegroup = helperModel.regexfy_usergroup(retdone.result[0].donepermit);
+    
+                //then get usernames of those inside these groups
+                let toUsersQuery = `SELECT ${dbModel.getDbUsergroupsSchemaColUsername()} AS 'user' FROM ${dbModel.getDbUsergroupsSchema()} WHERE REGEXP_LIKE(${dbModel.getDbUsergroupsSchemaColUsergroup()}, '${donegroup}')`;
+                let rettoUsers = await dbModel.performQuery(toUsersQuery);
+                if(rettoUsers.error){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: toUsersQuery error');
+                    return;
+                }
+                if(!rettoUsers.result || !rettoUsers.result.length){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: toUsersQuery no result');
+                    return;
+                }
+    
+                //build email 'to' list
+                //first string up the usernames
+                //and we'll cheat a bit by using regexfy_usergroup to make it regex-ready
+                let userstring = rettoUsers.result[0].user;
+                for(let i = 1; i < rettoUsers.result.length; i++){
+                    userstring += ',' + rettoUsers.result[i].user;
+                }
+                userstring = helperModel.regexfy_usergroup(userstring);
+    
+                //then we get the emails via another query
+                let emailQuery = `SELECT ${dbModel.getDbLoginSchemaColEmail()} AS 'email' FROM ${dbModel.getDbLoginSchema()} WHERE REGEXP_LIKE(${dbModel.getDbLoginSchemaColUsername()}, '${userstring}')`;
+                let retemail = await dbModel.performQuery(emailQuery);
+                if(retemail.error){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: emailQuery error ("to")');
+                    return;
+                }
+                if(!retemail.result || !retemail.result.length){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: emailQuery no result ("to")');
+                    return;
+                }
+    
+                //construct toList
+                let toList = [];
+                for(let i = 0; i < retemail.result.length; i++){
+                    toList.push(retemail.result[i].email);
+                }
+                console.dir(toList);
+    
+                //now we get the 'from' email,
+                //which is just the current user's email
+                emailQuery = `SELECT ${dbModel.getDbLoginSchemaColEmail()} AS 'email' FROM ${dbModel.getDbLoginSchema()} WHERE ${dbModel.getDbLoginSchemaColUsername()} = '${req.session.username}'`;
+                retemail = await dbModel.performQuery(emailQuery);
+                if(retemail.error){
+                    console.dir(retemail.error);
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: emailQuery error ("from")');
+                    return;
+                }
+                if(!retemail.result || !retemail.result.length){
+                    console.log('API Promote Doing to Done: Email not sent by API call from: user <' + req.session.username + '>, for task <' + btn_taskAction + '>.');
+                    console.log('Reason: emailQuery no result ("from")');
+                    return;
+                }
+                let sender = retemail.result[0].email;
+    
+                var message = {
+                    from: sender,
+                    to: toList,
+                    subject: "Task " + btn_taskAction + " to be approved",
+                    text: "Task " + btn_taskAction + " has been promoted to done state, waiting for task to be approved."
+                }
+    
+                emailModel.transporter.sendMail(message, function(err, info) {
+                        if (err) {
+                            console.dir(err);
+                        } else {
+                            console.dir(info);
+                            console.log("email sent");
+                        }
+                    });
+            }
+
             renderFrameMain(req,res,null,'Task action successfully performed on Task ' + btn_taskAction);
         }
     }

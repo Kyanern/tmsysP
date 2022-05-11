@@ -28,5 +28,8 @@
     "APICreateTaskNoPermit": "You are not permitted to create tasks for the specified application referred to in 'data'.",
     "APITaskNotExist": "Task does not exist.",
     "APITaskCannotPromoteToState": "Task cannot promote to specified state. Please refer to 'data' for task current state and list of states it can promote to.",
-    "APIPromoteTaskNoPermit": "You are not permitted to promote this task from the specified 'from' state to the specified 'to' state."
+    "APIPromoteTaskNoPermit": "You are not permitted to promote this task from the specified 'from' state to the specified 'to' state.",
+    "APIPlanInvalid": "Invalid Plan.",
+    "APIPromoteTaskShowAPIs": "Please refer to 'data' for a list of API endpoints used to promote tasks from one state to another.",
+    "APIShowAPIs": "Please refer to 'data for a list of API endpoints."
 }
