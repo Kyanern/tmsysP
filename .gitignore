@@ -1,3 +1,4 @@
 node_modules
 scrapbook*.txt
 code-snippets
+.env

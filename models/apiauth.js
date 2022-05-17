@@ -12,7 +12,7 @@ const argon2Model = require('./argon2');
      * Middleware function to prepare req for authorization middleware chain
      */
     authPreprocess: async(req,res,next)=>{
-        console.log("hit: authPreprocess.");
+        //console.log("hit: authPreprocess.");
         if(!req.data){
             req.data = new Object();
         }
@@ -24,7 +24,7 @@ const argon2Model = require('./argon2');
      * Middleware function to handle authorization via Basic Auth
      */
     authBasic: async(req,res,next)=>{
-        console.log("hit: authBasic.");
+        //console.log("hit: authBasic.");
         //console.dir(req.headers);
         /***
          * (1) FUTURE: 

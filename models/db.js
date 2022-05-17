@@ -6,7 +6,10 @@ const helperModel = require('./helperfuncs');
 
 /** do not export these */
 let getDbConnectionString = () => {
-    return `mysql://${dbConfigs.dbUser}:${dbConfigs.dbPass}@${dbConfigs.dbHost}:${dbConfigs.dbPort}/`;
+    //return `mysql://${dbConfigs.dbUser}:${dbConfigs.dbPass}@${dbConfigs.dbHost}:${dbConfigs.dbPort}/`;
+    let connectionString = `mysql://${process.env.DBUSER}:${process.env.DBPASS}@${process.env.DBHOST}:${process.env.DBPORT}/`;
+    //console.log("connectionString = "+ connectionString);
+    return connectionString;
 }
 
 let mapTaskStatesToAppPerms = new Object();

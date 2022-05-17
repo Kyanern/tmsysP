@@ -1,8 +1,4 @@
 {
-    "dbHost": "localhost",
-    "dbPort": "3306",
-    "dbUser": "tmsysAdmin",
-    "dbPass": "1tmsys1Admin.",
     "dbLoginSchema": "nodelogin.accounts",
     "dbLoginSchemaColUsername": "`username`",
     "dbLoginSchemaColPassword": "`password`",
