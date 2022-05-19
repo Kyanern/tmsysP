@@ -1,0 +1,9 @@
+FROM localhost:5000/node:16.14.0-alpine
+
+WORKDIR /app
+
+COPY . .
+
+EXPOSE $PORT
+
+CMD ["node", "index.js"]
